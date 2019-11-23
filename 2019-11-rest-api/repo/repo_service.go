@@ -13,14 +13,35 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package main
+package repo
 
 import (
-	"fmt"
-	"github.com/quoeamaster/golang_blogs/app"
+	"github.com/pborman/uuid"
 )
 
-func main()  {
-	fmt.Println("starting server at port 8100")
-	app.NewPortraitApp()
+
+const (
+	REPO_DEF_PATH = "repo/"
+)
+
+type FileRepoService struct {
+
+}
+
+func NewFileRepoService() (instance *FileRepoService) {
+	instance = new(FileRepoService)
+	if err := instance.Init(); err != nil {
+		panic(err)
+	}
+	return
+}
+
+func (r *FileRepoService) Init() (err error) {
+
+	return
+}
+
+func (r *FileRepoService) generatePortraitId() (id string) {
+	id = uuid.New()
+	return
 }

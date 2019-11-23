@@ -15,10 +15,14 @@ limitations under the License.
 */
 package app
 
-import "github.com/ant0ine/go-json-rest/rest"
+import (
+	"github.com/ant0ine/go-json-rest/rest"
+	"github.com/quoeamaster/golang_blogs/repo"
+	"net/http"
+)
 
 type PortraitApp struct {
-
+	fileRepoService *repo.FileRepoService
 }
 
 func NewPortraitApp() (instance *PortraitApp) {
@@ -31,8 +35,48 @@ func NewPortraitApp() (instance *PortraitApp) {
 }
 
 func (p *PortraitApp) Init() (err error) {
-	rest.NewApi()
+	// create repo service
+	p.fileRepoService = repo.NewFileRepoService()
 
+	// setup REST api
+	api := rest.NewApi()
+	api.Use(rest.DefaultDevStack...)
+
+	router, err := rest.MakeRouter(
+		rest.Post("/addPost", p.PostAddPost),
+		rest.Post("/addComment", p.PostAddPost),
+		rest.Get("/getPost/:id", p.GetPostById),
+		rest.Get("/getRandom10Posts", p.GetRandom10Posts),
+	)
+	if err != nil {
+		return err
+	}
+
+	api.SetApp(router)
+	err = http.ListenAndServe(":8100", api.MakeHandler())
+	if err != nil {
+		return
+	}
 	return
 }
 
+
+// involve multipart and form-data
+func (p *PortraitApp) PostAddPost(w rest.ResponseWriter, req *rest.Request) {
+
+}
+
+// involve form-data or request-body only
+func (p *PortraitApp) PostAddComment(w rest.ResponseWriter, req *rest.Request) {
+
+}
+
+// involve path-param
+func (p *PortraitApp) GetPostById(w rest.ResponseWriter, req *rest.Request) {
+
+}
+
+// get a random top 10 post(s)
+func (p *PortraitApp) GetRandom10Posts(w rest.ResponseWriter, req *rest.Request) {
+
+}
