@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>portrait app - listing</title>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"> <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/css/mdb.min.css" rel="stylesheet"> <!-- Material Design Bootstrap -->
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> <!-- vue.js -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script> <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script> <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/js/mdb.min.js"></script> <!-- MDB core JavaScript -->
+
+    <style>
+        .container-main {
+            width: 1000px;
+            margin: auto;
+            text-align: center;
+        }
+        .main-title {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+    </style>
+
+    <script>
+        function submitForm() {
+            document.forms[0].submit();
+        }
+    </script>
+</head>
+<body class="container-main"
+      style="margin-top: 40px;">
+
+    <form action="add.html" method="post">
+        <span class="fa-stack fa-1x red-text float-right"
+              onclick="submitForm()"
+              style="cursor:pointer;"
+              title="click to add a new portrait">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="far fa-file-image fa-stack-1x fa-inverse"></i>
+        </span>
+    </form>
+
+    <div class="main-title"
+         style="margin-bottom: 40px;">
+        random 10 Portraits</div>
+
+    <div class="container" id="app">
+        <div class="row">
+            <div class="col-sm-4"
+                 v-for="item in portraits"
+                 v-key="item.id"
+            >
+                <portrait-card
+                    v-bind:item="item"
+                ></portrait-card>
+            </div>
+        </div>
+    </div>
+
+    <!-- div id="app2">
+        <span v-bind:title="message">something on title</span>
+    </div -->
+    <!--
+        <div class="col-sm-4">
+            <portrait-card
+                v-bind:item="{ text: 'card 1' }"
+            ></portrait-card>
+        </div>
+    -->
+
+
+
+    <!-- add back the vue.js components here; the html elements must be available before Vue is run -->
+    <script>
+        portraitCard = Vue.component('portrait-card', {
+            props: [ 'item' ],
+            template: '<span>card here! ({{item.text}})</span>',
+            methods: {
+
+            }
+        });
+
+        app = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello Vue.js!',
+                portraits: []
+            }
+        })
+
+        app2 = new Vue({
+            el: '#app2',
+            data: {
+                message: 'testing on component'
+            }
+        })
+
+        // let portraits = []
+        // get the random10portraits from server
+        if (jQuery.getJSON) {
+            jQuery.getJSON("http://localhost:8100/api/getRandom10Posts",
+                null,
+                function (data) {
+                    let portraits = data["portraits"]
+                    if (app) {
+                        app._data.portraits = portraits
+                    }
+                }
+            );
+        }   // get the random 10
+
+        /*
+        console.log("data.message =>")
+        console.log(app2)
+        app2._data.message = "sexy bone"
+        console.log(app2._data.message)
+        */
+    </script>
+</body>
+</html>
