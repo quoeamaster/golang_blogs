@@ -17,16 +17,17 @@ package repo
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/pborman/uuid"
 	"io/ioutil"
 	"os"
+	"strings"
 )
 
 const (
-	REPO_DEF_PATH = "repo/"
+	REPO_DEF_PATH = "webapp/portrait_repo/"
 	FILE_INFO     = "info.me"
 	FILE_COMMENT  = "comment.me"
-	FILE_IMG      = "portrait_main."
 )
 
 type FileRepoService struct {
@@ -42,7 +43,7 @@ func NewFileRepoService() (instance *FileRepoService) {
 }
 
 func (r *FileRepoService) Init() (err error) {
-
+	// any repo connector setup here
 	return
 }
 
@@ -52,12 +53,16 @@ func (r *FileRepoService) generatePortraitId() (id string) {
 	return
 }
 
+// create the folder (e.g. repo/{UUID} ) where the UUID is generated on demand
 func (r *FileRepoService) CreateFolder() (folderName string, err error) {
-
+	folderName = r.generatePortraitId()
+	err = os.MkdirAll(REPO_DEF_PATH +  folderName, 0777)
 	return
 }
 
 func (r *FileRepoService) WriteFileFromBytes(bContent []byte, folder, filename string) (err error) {
+	finalFilename := REPO_DEF_PATH + folder + "/" + filename
+	err = ioutil.WriteFile(finalFilename, bContent, 0777)
 	return
 }
 
@@ -92,7 +97,8 @@ func (r *FileRepoService) GetFolderInfo(list []string) (err error, metaList []ma
 				return
 			}
 			metaMap := make(map[string]interface{})
-			err3 = json.Unmarshal(bContent, metaMap)
+			// the "interface{}" must be an address reference
+			err3 = json.Unmarshal(bContent, &metaMap)
 			if err3 != nil {
 				err = err3
 				return
@@ -100,5 +106,20 @@ func (r *FileRepoService) GetFolderInfo(list []string) (err error, metaList []ma
 			metaList = append(metaList, metaMap)
 		}
 	}
+	return
+}
+
+func (r *FileRepoService) GetCommentsByPortraitId(id string) (err error, comments []string) {
+	comments = []string{}
+
+	commentFileLocation := REPO_DEF_PATH + id + "/" + FILE_COMMENT
+	if fInfo, err := os.Stat(commentFileLocation); !os.IsNotExist(err) && !fInfo.IsDir() {
+		if bContent, err2 := ioutil.ReadFile(commentFileLocation); err2 != nil {
+			return
+		} else {
+			comments = strings.Split(string(bContent), "\n")
+		}
+	}
+	fmt.Println("length of comments:", len(comments), comments)
 	return
 }

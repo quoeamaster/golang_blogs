@@ -16,6 +16,7 @@ limitations under the License.
 package app
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/ant0ine/go-json-rest/rest"
 	"github.com/quoeamaster/golang_blogs/repo"
@@ -23,6 +24,7 @@ import (
 	"math/rand"
 	"net/http"
 	"strings"
+	"time"
 )
 
 type PortraitApp struct {
@@ -37,15 +39,6 @@ func NewPortraitApp() (instance *PortraitApp) {
 	}
 	return
 }
-
-/*
-type PortraitModel struct {
-	PhotoLocation string
-	CreateDate time.Time
-	Description string
-	Photographer string
-}
-*/
 
 func (p *PortraitApp) Init() (err error) {
 	// create repo service
@@ -88,27 +81,95 @@ func (p *PortraitApp) Init() (err error) {
 
 // involve multipart and form-data
 func (p *PortraitApp) PostAddPost(w rest.ResponseWriter, req *rest.Request) {
-	// valueMap := make(map[string]interface{})
+	valueMap := make(map[string]interface{})
 
 	defer req.Body.Close()
 	/*
-	 *	exception: no multipart boundary param in Content-Type
+	 *	exception: no multipart boundary param in Content-Type means ...
+	 * 	normal multipart/form-data should be like this where the "boundary" param is available for parsing
+	 * 	multipart/form-data; boundary=----WebKitFormBoundaryIox6yH4Vs0P82Y5O
+	 *
+	 *	for jQuery; if you set the headers to Content-Type: multipart/form-data;
+	 *	then the boundary would not be supplied at all; hence got this exception
+	 *
+	 *	jQuery bug has a workaround but setting BOTH: (check add.html => jQueryFileUpload)
+	 *	1. enctype => multipart/form-data,
+	 *	2. contentType => false
 	 */
-
-	// need to parse everything by myself... orz
-
-	bC, _ := ioutil.ReadAll(req.Body)
-	fmt.Println(string(bC))
-
-	reader, err := req.MultipartReader()
-	if err != nil {
-		fmt.Println(err)
+	defer req.Body.Close()
+	if err := req.ParseMultipartForm(10 << 20); err != nil {
+		valueMap["error"] = err.Error()
+		w.WriteJson(valueMap)
 		return
 	}
-	fmt.Println(req.ContentLength)
-	fmt.Println(reader)
+	// create folder for portrait
+	uuidFolder, err := p.fileRepoService.CreateFolder()
+	if err != nil {
+		valueMap["error"] = err.Error()
+		w.WriteJson(valueMap)
+		return
+	}
+	// write the uploaded photo file
+	fileParts := req.MultipartForm.File["file"]
+	if fileParts != nil && len(fileParts) > 0 {
+		// since only 1 file should be uploaded via the param named "file"... get only the 1st file-part
+		uploadedFile, err2 := fileParts[0].Open()
+		if err2 != nil {
+			valueMap["error"] = err2.Error()
+			w.WriteJson(valueMap)
+			return
+		}
+		bContent, err2 := ioutil.ReadAll(uploadedFile)
+		if err2 != nil {
+			valueMap["error"] = err2.Error()
+			w.WriteJson(valueMap)
+			return
+		}
+		err2 = p.fileRepoService.WriteFileFromBytes(bContent, uuidFolder, fileParts[0].Filename)
+		if err2 != nil {
+			valueMap["error"] = err2.Error()
+			w.WriteJson(valueMap)
+			return
+		}
+		defer uploadedFile.Close()
+	}
+	// write meta-info (desc, create_date, photographer, id, photo_location)
+	model := new(PortraitModel)
+	model.Id = uuidFolder
+	cDate, err := time.Parse("2006-01-02", req.Form.Get("createDate"))
+	if err != nil {
+		cDate = time.Unix(0,0)
+	}
+	model.CreateDate = cDate
+	model.Description = req.Form.Get("desc")
+	model.Photographer = req.Form.Get("photographer")
+	model.PhotoLocation = fileParts[0].Filename
 
+	bContent, err := json.Marshal(model)
+	if err != nil {
+		valueMap["error"] = err.Error()
+		w.WriteJson(valueMap)
+		return
+	}
+	if err = p.fileRepoService.WriteFileFromBytes(bContent, uuidFolder, repo.FILE_INFO); err != nil {
+		valueMap["error"] = err.Error()
+		w.WriteJson(valueMap)
+		return
+	}
+	// all good!
+	valueMap["status"] = "success"
+	valueMap["message"] = "portrait successfully created"
+	valueMap["portrait_id"] = uuidFolder
+	w.WriteJson(valueMap)
+}
 
+// model / struct for json marshalling purpose
+type PortraitModel struct {
+	Id string				`json:"id"`
+	PhotoLocation string	`json:"photo_location"`
+	CreateDate time.Time	`json:"create_date"`
+	Description string		`json:"desc"`
+	Photographer string		`json:"photographer"`
 }
 
 // involve form-data or request-body only
@@ -118,12 +179,22 @@ func (p *PortraitApp) PostAddComment(w rest.ResponseWriter, req *rest.Request) {
 
 // involve path-param
 func (p *PortraitApp) GetPostById(w rest.ResponseWriter, req *rest.Request) {
+	valueMap := make(map[string]interface{})
 
+	portraitId := req.PathParams["id"]
+	// parse-form
+	if err := req.ParseForm(); err != nil {
+		valueMap["error"] = err.Error()
+		w.WriteJson(valueMap)
+		return
+	}
+
+	fmt.Println(portraitId)
 }
 
 // get a random top 10 post(s)
 // expected json result =>
-// { portraits: [ { id: "axdfd", photo_location: "abc.jpg", create_date: "2019-01-01", desc: "hi", photographe: "victor freeze" }, { ... } ] }
+// { portraits: [ { id: "axdfd", photo_location: "abc.jpg", create_date: "2019-01-01", desc: "hi", photographer: "victor freeze" }, { ... } ] }
 func (p *PortraitApp) GetRandom10Posts(w rest.ResponseWriter, req *rest.Request) {
 	valueMap := make(map[string]interface{})
 

@@ -57,26 +57,79 @@
             formObject.append("photographer", document.querySelector("#txtPhotographer").value);
             formObject.append("file", fileUploadObject.files[0]);
 
+            // using xhr way
+            // xhrFileUpload(formObject);
+
+            // using jQuery
+            jQueryFileUpload(formObject);
+        }
+
+        /**
+         * jQuery way to ajax file upload
+         * @param formObject
+         */
+        function jQueryFileUpload(formObject) {
+            /*
+             *  so you can't set headers to Content-Type: multipart/form-data
+             *  also you NEED to add back enctype: multipart/form-data INSTEAD~
+             *  plus set contentType: false TOO!
+             */
             if (jQuery) {
                 jQuery.ajax({
                     'type': 'POST',
+                    'enctype': 'multipart/form-data',
                     'url': "http://localhost:8100/api/addPost",
                     'data': formObject,
                     'processData': false,
+                    'contentType': false,
+                    'cache': false,
+                    'timeout': 600000,
                     //'dataType': 'json',
                     'success': function (data, status) {
-                        console.log(data);
-                        console.log(status);
-                        // todo: at least show an alert message
+                        if (data && "success" === data["status"]) {
+                            alert(data["message"])
+                        }
                     }
                 });
             }
         }
+
+        /**
+         * xmlHttpRequest way to file upload
+         * @param formObject
+         */
+        function xhrFileUpload(formObject) {
+            let xhr = new XMLHttpRequest();
+
+            xhr.open("POST", "http://localhost:8100/api/addPost", true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // Every thing ok, file uploaded
+                    console.log(xhr.responseText); // handle response.
+                    console.log("success~")
+                }
+            };
+            xhr.send(formObject);
+        }
+
+        function fwdToListing() {
+            window.location = "http://localhost:8100/static/listing.html"
+        }
+
     </script>
 </head>
 <body class="container-main"
       style="margin-top: 40px;">
 
+    <span class="fa-stack fa-1x amber-text float-right"
+        onclick="fwdToListing()"
+        style="cursor:pointer;"
+        title="back to listing page">
+        <i class="fas fa-circle fa-stack-2x"></i>
+        <i class="far fa-address-book fa-stack-1x fa-inverse"></i>
+    </span>
+
+    </span>
     <div class="main-title" style="margin-bottom: 20px;">add a new portrait</div>
 
     <div class="container">

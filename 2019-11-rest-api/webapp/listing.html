@@ -51,9 +51,9 @@
 
     <div class="container" id="app">
         <div class="row">
+            <!-- v-key="item.id" -->
             <div class="col-sm-4"
                  v-for="item in portraits"
-                 v-key="item.id"
             >
                 <portrait-card
                     v-bind:item="item"
@@ -79,9 +79,38 @@
     <script>
         portraitCard = Vue.component('portrait-card', {
             props: [ 'item' ],
-            template: '<span>card here! ({{item.text}})</span>',
+            // template: '<span>card here! ({{item.text}})</span>',
+            template: `
+                <div class="card" style="margin-bottom: 16px;">
+                    <img class="card-img-top" v-bind:src="getImgLocation()" alt="Card image cap">
+                    <div class="card-body">
+                        <h4 class="card-title"><a>{{getPhotographer()}}</a></h4>
+                        <p class="card-text">{{getDesc()}}</p>
+                        <a href="#" class="btn btn-primary" v-on:click="fwdToCommentPage();">comment</a>
+                    </div>
+                </div>
+            `,
             methods: {
-
+                getImgLocation: function () {
+                    let location = "http://localhost:8100/static/portrait_repo/" + this.item['id'] + "/" + this.item['photo_location'];
+                    return location;
+                },
+                getPhotographer: function () {
+                    let name = this.item["photographer"];
+                    if (name==="") {
+                        name = "anonymous";
+                    }
+                    return name;
+                },
+                getDesc: function () {
+                    let name = this.item["desc"];
+                    return name;
+                },
+                fwdToCommentPage: function () {
+                    console.log(window.location);
+                    console.log(this.item["id"]);
+                    console.log(this.item["photo_location"]);
+                }
             }
         });
 
@@ -93,12 +122,12 @@
             }
         })
 
-        app2 = new Vue({
+        /*app2 = new Vue({
             el: '#app2',
             data: {
                 message: 'testing on component'
             }
-        })
+        })*/
 
         // let portraits = []
         // get the random10portraits from server
@@ -108,18 +137,14 @@
                 function (data) {
                     let portraits = data["portraits"]
                     if (app) {
-                        app._data.portraits = portraits
+                        app._data.portraits = portraits;
+                        console.log(app._data.portraits);
                     }
                 }
             );
         }   // get the random 10
 
-        /*
-        console.log("data.message =>")
-        console.log(app2)
-        app2._data.message = "sexy bone"
-        console.log(app2._data.message)
-        */
+
     </script>
 </body>
 </html>
