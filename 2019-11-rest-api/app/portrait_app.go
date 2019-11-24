@@ -17,7 +17,6 @@ package app
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/ant0ine/go-json-rest/rest"
 	"github.com/quoeamaster/golang_blogs/repo"
 	"io/ioutil"
@@ -59,7 +58,7 @@ func (p *PortraitApp) Init() (err error) {
 
 	router, err := rest.MakeRouter(
 		rest.Post("/addPost", p.PostAddPost),
-		rest.Post("/addComment", p.PostAddPost),
+		rest.Post("/addComment", p.PostAddComment),
 		rest.Get("/getPost/:id", p.GetPostById),
 		rest.Get("/getRandom10Posts", p.GetRandom10Posts),
 	)
@@ -70,6 +69,7 @@ func (p *PortraitApp) Init() (err error) {
 	api.SetApp(router)
 	http.Handle("/api/", http.StripPrefix("/api", api.MakeHandler()))
 	http.Handle("/static/", http.StripPrefix("/static", http.FileServer(http.Dir("./webapp"))))
+	// static pages example => http://localhost:8100/static/index.html (index.html was available under /webapp folder)
 
 	err = http.ListenAndServe(":8100", nil)
 	if err != nil {
@@ -174,7 +174,22 @@ type PortraitModel struct {
 
 // involve form-data or request-body only
 func (p *PortraitApp) PostAddComment(w rest.ResponseWriter, req *rest.Request) {
+	valueMap := make(map[string]interface{})
 
+	if err := req.ParseForm(); err != nil {
+		valueMap["error"] = err.Error()
+		w.WriteJson(valueMap)
+		return
+	}
+	// append contents to comment file
+	if err := p.fileRepoService.AppendStringToFile(req.Form.Get("comment"), req.Form.Get("id"), repo.FILE_COMMENT, repo.COMMENT_DELIMITER); err != nil {
+		valueMap["error"] = err.Error()
+		w.WriteJson(valueMap)
+		return
+	}
+	valueMap["status"] = "success"
+	valueMap["message"] = "comment successfully added~ Reload page to refresh the comments"
+	w.WriteJson(valueMap)
 }
 
 // involve path-param
@@ -188,8 +203,16 @@ func (p *PortraitApp) GetPostById(w rest.ResponseWriter, req *rest.Request) {
 		w.WriteJson(valueMap)
 		return
 	}
-
-	fmt.Println(portraitId)
+	// get comments by portrait_id
+	if err, comments := p.fileRepoService.GetCommentsByPortraitId(portraitId); err != nil {
+		valueMap["error"] = err.Error()
+		w.WriteJson(valueMap)
+		return
+	} else {
+		valueMap["comments"] = comments
+		valueMap["status"] = "success"
+		w.WriteJson(valueMap)
+	}
 }
 
 // get a random top 10 post(s)

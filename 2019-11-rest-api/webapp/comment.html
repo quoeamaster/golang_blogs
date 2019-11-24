@@ -27,17 +27,116 @@
     </style>
 
     <script>
-        function submitForm() {
-            document.forms[0].submit();
+        function fwdToListing() {
+            window.location = "http://localhost:8100/static/listing.html";
         }
     </script>
 </head>
 <body class="container-main"
       style="margin-top: 40px;">
 
+    <span class="fa-stack fa-1x green-text float-right"
+      onclick="fwdToListing()"
+      style="cursor:pointer;"
+      title="back to listing page">
+        <i class="fas fa-circle fa-stack-2x"></i>
+        <i class="far fa-address-book fa-stack-1x fa-inverse"></i>
+    </span>
+
+    <div class="main-title" style="font-weight: lighter; margin-bottom: 24px;">
+        add a comment here
+    </div>
+
+    <div class="container" id="app">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card" style="margin-bottom: 16px;">
+                    <img class="card-img-top " v-bind:src="getImgLocation()" alt="Card image cap">
+                    <div class="card-body">
+                        <div class="md-form">
+                            <textarea id="txtComment" class="md-textarea form-control" rows="3"></textarea>
+                            <label for="txtComment">new comment</label>
+                        </div>
+                        <a href="#" class="btn btn-primary" v-on:click="addCommentOnPortraitId();">add</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div v-for="comment in comments">
+                    <comment-card v-bind:comment="comment"></comment-card>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- add back the vue.js components here; the html elements must be available before Vue is run -->
     <script>
+        let queryString = new URLSearchParams(document.location.search.substring(1));
 
+        commentCard = Vue.component('comment-card', {
+            props: ['comment'],
+            methods: {
+                getComment: function () {
+                    if (this.comment === "") {
+                        // last line due to the delimiter bug ... kindly make it as a information message
+                        return "<div style='font-weight: bold; text-align: center;'>~ welcome for new comments ~</div>"
+                    } else {
+                        // replace \n with <br/>
+                        return this.comment.replace(/\n/g, '<br/>');
+                    }
+                }
+            },
+            template: `
+                <div class="card" style="margin-bottom: 8px; text-align: left;">
+                    <div class="card-body">
+                        <p class="card-text"><span v-html="getComment()"></span></p>
+                    </div>
+                </div>
+            `
+        });
+
+        app = new Vue({
+            el: '#app',
+            data: {
+                comments: []
+            },
+            methods: {
+                getImgLocation: function () {
+                    return "http://localhost:8100/static/portrait_repo/" + queryString.get("id") + "/" + queryString.get("photo_location");
+                },
+                addCommentOnPortraitId: function () {
+                    if (document.querySelector("#txtComment").value === "") {
+                        alert("comment is compulsory~");
+                        return
+                    }
+                    if (jQuery.post) {
+                        jQuery.post("http://localhost:8100/api/addComment",
+                            { "id": queryString.get("id"), "comment": document.querySelector("#txtComment").value },
+                            function (data) {
+                                // PS. should check the status returned before displaying the message etc...
+                                if (data) {
+                                    alert(data['message']);
+                                }
+                            }
+                        );
+                    }
+                }
+            }
+        });
+
+
+        if (jQuery.getJSON) {
+            jQuery.getJSON("http://localhost:8100/api/getPost/" + queryString.get("id"),
+                { "photo_location": queryString.get("photo_location") },
+                function (data) {
+                    let comments = data["comments"];
+console.log(comments);
+                    if (app) {
+                        app._data.comments = comments;
+                    }
+                }
+            );
+        }   // get the comments based on this given portrait_id
     </script>
 </body>
 </html>

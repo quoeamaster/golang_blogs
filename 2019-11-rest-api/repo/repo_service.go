@@ -17,7 +17,6 @@ package repo
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/pborman/uuid"
 	"io/ioutil"
 	"os"
@@ -25,9 +24,10 @@ import (
 )
 
 const (
-	REPO_DEF_PATH = "webapp/portrait_repo/"
-	FILE_INFO     = "info.me"
-	FILE_COMMENT  = "comment.me"
+	REPO_DEF_PATH     = "webapp/portrait_repo/"
+	FILE_INFO         = "info.me"
+	FILE_COMMENT      = "comment.me"
+	COMMENT_DELIMITER = "--delim--"
 )
 
 type FileRepoService struct {
@@ -60,9 +60,28 @@ func (r *FileRepoService) CreateFolder() (folderName string, err error) {
 	return
 }
 
+// write / overwrite content to a file; if you prefer to append contents instead...
+// check the AppendStringToFile for string data
 func (r *FileRepoService) WriteFileFromBytes(bContent []byte, folder, filename string) (err error) {
 	finalFilename := REPO_DEF_PATH + folder + "/" + filename
 	err = ioutil.WriteFile(finalFilename, bContent, 0777)
+	return
+}
+
+// append contents to an existing file; if the file is not available, create it first
+func (r *FileRepoService) AppendStringToFile(content, folder, filename, delimiter string) (err error) {
+	finalFilename := REPO_DEF_PATH + folder + "/" + filename
+
+	// open file for append
+	fileHandle, err := os.OpenFile(finalFilename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0777)
+	defer fileHandle.Close()
+	if err != nil {
+		return
+	}
+	_, err = fileHandle.WriteString(content + delimiter)
+	if err != nil {
+		return
+	}
 	return
 }
 
@@ -117,9 +136,9 @@ func (r *FileRepoService) GetCommentsByPortraitId(id string) (err error, comment
 		if bContent, err2 := ioutil.ReadFile(commentFileLocation); err2 != nil {
 			return
 		} else {
-			comments = strings.Split(string(bContent), "\n")
+			comments = strings.Split(string(bContent), COMMENT_DELIMITER)
 		}
 	}
-	fmt.Println("length of comments:", len(comments), comments)
+	// fmt.Println("length of comments:", len(comments), comments)
 	return
 }

@@ -107,9 +107,10 @@
                     return name;
                 },
                 fwdToCommentPage: function () {
-                    console.log(window.location);
-                    console.log(this.item["id"]);
-                    console.log(this.item["photo_location"]);
+                    window.location = "http://localhost:8100/static/comment.html?id=" +
+                        this.item["id"] +
+                        "&photo_location=" +
+                        this.item["photo_location"];
                 }
             }
         });
@@ -129,7 +130,6 @@
             }
         })*/
 
-        // let portraits = []
         // get the random10portraits from server
         if (jQuery.getJSON) {
             jQuery.getJSON("http://localhost:8100/api/getRandom10Posts",
@@ -138,7 +138,6 @@
                     let portraits = data["portraits"]
                     if (app) {
                         app._data.portraits = portraits;
-                        console.log(app._data.portraits);
                     }
                 }
             );
