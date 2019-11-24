@@ -113,7 +113,7 @@ func (r *FileRepoService) GetCommentsByPortraitId(id string) (err error, comment
 	comments = []string{}
 
 	commentFileLocation := REPO_DEF_PATH + id + "/" + FILE_COMMENT
-	if fInfo, err := os.Stat(commentFileLocation); !os.IsNotExist(err) && !fInfo.IsDir() {
+	if fInfo, err3 := os.Stat(commentFileLocation); !os.IsNotExist(err3) && !fInfo.IsDir() {
 		if bContent, err2 := ioutil.ReadFile(commentFileLocation); err2 != nil {
 			return
 		} else {

@@ -12,4 +12,4 @@
 *.out
 
 # all portrait_repo related data / test files
-*/portrait_repo/*
+2019-11-rest-api/webapp/portrait_repo/*
