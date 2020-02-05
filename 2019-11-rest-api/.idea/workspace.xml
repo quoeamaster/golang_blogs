@@ -3,6 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="477a6f69-dbf3-4bab-ad5a-bbc7bf266913" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2020-02-data-generator-inventory-system/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-02-data-generator-inventory-system/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2020-02-data-generator-inventory-system/command/parser.go" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-02-data-generator-inventory-system/command/parser.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2020-02-data-generator-inventory-system/command/rootCommand.go" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-02-data-generator-inventory-system/command/rootCommand.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,7 +18,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/portrait_app.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-222">
+            <state relative-caret-position="930">
               <caret line="71" column="118" selection-start-line="71" selection-start-column="118" selection-end-line="71" selection-end-column="118" />
               <folding>
                 <element signature="e#572#740#0" expanded="true" />
@@ -30,7 +33,7 @@
         <entry file="file://$PROJECT_DIR$/main.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="285">
-              <caret line="19" column="44" lean-forward="true" selection-start-line="19" selection-start-column="5" selection-end-line="19" selection-end-column="44" />
+              <caret line="19" column="44" selection-start-line="19" selection-start-column="5" selection-end-line="19" selection-end-column="44" />
             </state>
           </provider>
         </entry>
@@ -39,7 +42,7 @@
         <entry file="file://$PROJECT_DIR$/go.mod">
           <provider selected="true" editor-type-id="text-editor">
             <state>
-              <caret column="42" lean-forward="true" selection-start-column="30" selection-end-column="42" />
+              <caret column="42" selection-start-column="30" selection-end-column="42" />
             </state>
           </provider>
         </entry>
@@ -91,6 +94,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -107,7 +111,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -136,7 +139,7 @@
     <frame x="0" y="23" width="1680" height="1027" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25885227" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26495728" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -266,7 +269,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/portrait_app.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-222">
+        <state relative-caret-position="930">
           <caret line="71" column="118" selection-start-line="71" selection-start-column="118" selection-end-line="71" selection-end-column="118" />
           <folding>
             <element signature="e#572#740#0" expanded="true" />
@@ -279,14 +282,14 @@
     <entry file="file://$PROJECT_DIR$/main.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
-          <caret line="19" column="44" lean-forward="true" selection-start-line="19" selection-start-column="5" selection-end-line="19" selection-end-column="44" />
+          <caret line="19" column="44" selection-start-line="19" selection-start-column="5" selection-end-line="19" selection-end-column="44" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/go.mod">
       <provider selected="true" editor-type-id="text-editor">
         <state>
-          <caret column="42" lean-forward="true" selection-start-column="30" selection-end-column="42" />
+          <caret column="42" selection-start-column="30" selection-end-column="42" />
         </state>
       </provider>
     </entry>

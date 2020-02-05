@@ -32,8 +32,12 @@ var cfgFile string
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "",
-	Short: "short comment",
-	Long: `longer comment`,
+	Short: "utility for generator supermarket transactions which could co-link with an inventory system",
+	Long: `
+utility for generator supermarket transactions which could co-link with an inventory system
+
+'parse' command would be a good start where supermarket locations are prepared for the generation phase.
+`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
@@ -46,7 +50,6 @@ var rootCmd = &cobra.Command{
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println("*shit I am here")
 		fmt.Println(err)
 		os.Exit(1)
 	}
