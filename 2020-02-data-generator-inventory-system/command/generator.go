@@ -19,17 +19,21 @@ import "github.com/spf13/cobra"
 
 var genCmd = &cobra.Command{
 	Use:   "generate",
-	Short: "generate supermarket transactions or inventory records; results would be written to files or elasticsearch directly",
+	Short: "generate supermarket transactions or inventory records; results would be written to elasticsearch directly. Use 'file' command to write results to files instead.",
 	Long: `
-generate supermarket transactions or inventory records; results would be written to files or elasticsearch directly
+generate supermarket transactions or inventory records; results would be written to files or elasticsearch directly. 
+Use 'file' command to write results to files instead.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		execute(cmd, args)
+		c := new(GenerateCmdStruct)
+		c.execute(cmd, args)
 	},
 }
 
 func init() {
+	genCmd.AddCommand(genToFileCmd)
 	rootCmd.AddCommand(genCmd)
+
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
@@ -38,10 +42,41 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// heyCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	genCmd.Flags().StringP("source", "s", "datasource", "the folder containing the kml OR geojson files")
-	genCmd.Flags().StringP("filename", "f", "location", "the name of the kml OR geojson files, e.g. filename=abc then abc.kml OR abc.geojson is expected")
+	genCmd.PersistentFlags().StringP("source", "s", "datasource", "the folder containing the kml OR geojson files")
+	genCmd.PersistentFlags().StringP("filename", "f", "location", "the name of the kml OR geojson files, e.g. filename=abc then abc.kml OR abc.geojson is expected")
+
+	genCmd.Flags().StringP("elastichost", "", "http://localhost:9200", "elasticsearch host to connect to")
 }
 
-func execute(cmd *cobra.Command, args []string)  {
+type GenerateCmdStruct struct {
+
+}
+func (c *GenerateCmdStruct) execute(cmd *cobra.Command, args []string)  {
+	gUtil := NewGeneratorUtil()
+	gUtil.GenInventoryTrx()
+
 	return
 }
+
+
+// **** write to file command ****
+
+var genToFileCmd = &cobra.Command{
+	Use:   "file",
+	Short: "generate trx and write to file(s)",
+	Long: `
+generate trx and write to file(s)
+`,
+	Run: func(cmd *cobra.Command, args []string) {
+		c := new(GenToFileCmdStruct)
+		c.execute(cmd, args)
+	},
+}
+
+type GenToFileCmdStruct struct {
+
+}
+func (c *GenToFileCmdStruct) execute(cmd *cobra.Command, args []string) {
+	return
+}
+
