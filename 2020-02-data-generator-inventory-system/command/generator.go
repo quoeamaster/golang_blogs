@@ -58,7 +58,7 @@ func init() {
 	genCmd.PersistentFlags().StringP("source", "s", "datasource", "the folder containing the kml OR geojson files")
 	genCmd.PersistentFlags().StringP("filename", "f", "location", "the name of the kml OR geojson files, e.g. filename=abc then abc.kml OR abc.geojson is expected")
 	genCmd.PersistentFlags().StringP("profile", "p", genProfileInventory, "profile refers to which dataset to generate, valid option are 'inventory', 'sales' OR 'all'.")
-	genCmd.PersistentFlags().Int16("size", 5, "number of records to create on SALES trx only; for inventory profile, this value is ignored")
+	genCmd.PersistentFlags().Int32("size", 5, "number of records to create on SALES trx only; for inventory profile, this value is ignored")
 
 	genCmd.Flags().StringP("elastichost", "", "http://localhost:9200", "elasticsearch host to connect to")
 }
@@ -77,7 +77,7 @@ func (c *GenerateCmdStruct) execute(cmd *cobra.Command, args []string)  {
 	p, err := cmd.PersistentFlags().GetString("profile")
 	CommonPanic(err)
 
-	size, err := cmd.PersistentFlags().GetInt16("size")
+	size, err := cmd.PersistentFlags().GetInt32("size")
 	CommonPanic(err)
 
 	// generate the entries
@@ -85,6 +85,9 @@ func (c *GenerateCmdStruct) execute(cmd *cobra.Command, args []string)  {
 	switch p {
 	case genProfileInventory:
 		c.esInventoryIndex(entryResponse.InventoryList)
+	case genProfileSales:
+		c.esSalesIndex(entryResponse.SalesList)
+		// TODO: all profile
 	}
 
 
@@ -93,6 +96,7 @@ func (c *GenerateCmdStruct) execute(cmd *cobra.Command, args []string)  {
 
 const (
 	esIndexInventory = "m_supermarket_inventory"
+	esIndexSales     = "m_supermarket_sales"
 )
 
 func (c *GenerateCmdStruct) esInventoryIndex(data []InventoryTrxStruct) {
@@ -120,13 +124,47 @@ func (c *GenerateCmdStruct) esInventoryIndex(data []InventoryTrxStruct) {
 	CommonPanic(err)
 	defer response.Body.Close()
 	if response.IsError() {
-		panic(fmt.Sprintf("could not bulk ingest => %V", response.Status()))
+		panic(fmt.Sprintf("could not bulk ingest => %v", response.Status()))
 	}
 	rMap := ConvertESResponseToMap(*response)
-	fmt.Println(fmt.Sprintf("DONE bulk ingest on %v documents, took %vms with errors? %v", len(data), rMap["took"], rMap["errors"]))
+	fmt.Println(fmt.Sprintf("DONE [inventory] bulk ingest on %v documents, took %vms with errors? %v", len(data), rMap["took"], rMap["errors"]))
 }
 
+func (c *GenerateCmdStruct) esSalesIndex(data []SalesTrxStruct) {
+	es, err := elasticsearch.NewDefaultClient()
+	CommonPanic(err)
 
+	// assume index template already available in the elasticsearch cluster
+	var bulkBuf strings.Builder
+
+	for _, sVal := range data {
+		bulkBuf.WriteString(`{"index":{}}
+`)
+		bulkBuf.WriteString(fmt.Sprintf(`{ "date": "%v","selling_price": %v,"quantity": %v, "product": { "id": "%v","desc": "%v","batch_id": "%v"}, "client": { "id": "%v","name": "%v","gender": "%v","occupation": "%v"}, "location": { "id": "%v","name": "%v","post_code": "%v","coord": { "lat": %v, "lon": %v}}}
+`,
+			GetESFormattedDate(sVal.Date), sVal.SellingPrice, sVal.Quantity,
+			sVal.Product.Id, sVal.Product.Desc, sVal.Product.BatchId,
+			sVal.Client.Id, sVal.Client.Name, sVal.Client.Gender, sVal.Client.Occupation,
+			sVal.Location.Id, sVal.Location.Name, sVal.Location.PostCode, sVal.Location.Lat, sVal.Location.Lng ))
+		//if i == 0 {
+		//	fmt.Println(bulkBuf.String())
+		//}
+	}
+	bulkBuf.WriteString(`
+`)
+	req := esapi.BulkRequest{
+		Index: esIndexSales,
+		Body: strings.NewReader(bulkBuf.String()),
+	}
+	response, err := req.Do(context.Background(), es)
+	CommonPanic(err)
+	defer response.Body.Close()
+	if response.IsError() {
+		panic(fmt.Sprintf("could not bulk ingest => %v", response.Status()))
+	}
+	rMap := ConvertESResponseToMap(*response)
+	fmt.Println(fmt.Sprintf("DONE [sales] bulk ingest on %v documents, took %vms with errors? %v", len(data), rMap["took"], rMap["errors"]))
+}
 
 
 

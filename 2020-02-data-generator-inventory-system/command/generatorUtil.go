@@ -47,7 +47,7 @@ const (
 	srcOnlineSalesCsv = "sourceOnlineSales.csv"
 )
 
-func (u *generatorUtil) GenTrx(source, filename, profile string, size int16) (resp *EntryResponse) {
+func (u *generatorUtil) GenTrx(source, filename, profile string, size int32) (resp *EntryResponse) {
 	resp = new(EntryResponse)
 	resp.Profile = profile
 
@@ -60,10 +60,10 @@ func (u *generatorUtil) GenTrx(source, filename, profile string, size int16) (re
 
 		//err = ioutil.WriteFile(fmt.Sprintf("%v%vtest.json", source, string(os.PathSeparator)), bContent, 0755)
 		//CommonPanic(err)
-
-
+	} else if strings.Compare(genProfileSales, profile) == 0 {
+		resp.SalesList = u.generateSalesTrx(source, filename, size)
 	}
-	// TODO: other profiles (all, sales)
+	// TODO: other profiles (all)
 	return
 }
 func (u *generatorUtil) generateInventoryTrx(source, filename string) (inventoryList []InventoryTrxStruct) {
@@ -71,10 +71,11 @@ func (u *generatorUtil) generateInventoryTrx(source, filename string) (inventory
 	// save the list to "inventory_base.txt" => 1 line with "," separated
 	if len(u.invList) == 0 {
 		u.invList = u.getInventoryList(source, filename)
-		fmt.Println("*** not yet filled")
 	}
 	// load locations
-	u.locationList = u.loadPlacemartList(source, filename)
+	if len(u.locationList) == 0 {
+		u.locationList = u.loadPlacemartList(source, filename)
+	}
 
 	for _, inv := range u.invList {
 		eInv := new(InventoryTrxStruct)
@@ -201,6 +202,13 @@ func (u *generatorUtil) getRandomDate(lower, upper int) time.Time {
 	cDate = cDate.Add(-1 * (time.Hour * time.Duration(24*iDays)) )
 	return cDate
 }
+func (u *generatorUtil) getRandomDateWithin24Hours() time.Time {
+	cDate := time.Now()
+	randMinutes := rand.Intn(24 * 60)
+
+	cDate = cDate.Add(-1 * (time.Minute * time.Duration(randMinutes)) )
+	return cDate
+}
 func (u *generatorUtil) getRandomId(category string, seed int) (id string) {
 	d := int(time.Now().UnixNano())
 	id = fmt.Sprintf("%v", int(math.Round(rand.Float64() * float64(d)))+seed )
@@ -236,6 +244,55 @@ func (u *generatorUtil) loadPlacemartList(source, file string) (locations []Plac
 	return
 }
 
+
+func (u *generatorUtil) generateSalesTrx(source, filename string, size int32) (salesList []SalesTrxStruct) {
+	// check if inventory list and location list ready
+	if len(u.invList) == 0 {
+		u.invList = u.getInventoryList(source, filename)
+	}
+	if len(u.locationList) == 0 {
+		u.locationList = u.loadPlacemartList(source, filename)
+	}
+
+	for i:=0; i<int(size); i++ {
+		sS := new(SalesTrxStruct)
+		sS.Date = u.getRandomDateWithin24Hours()
+		sS.SellingPrice = u.getRandomFloat32(20, 160)
+		sS.Quantity = int32(u.getRandomInteger(1, 20))
+
+		sProd := new(ProductStruct)
+		invIdx := u.getRandomInteger(0, len(u.invList))
+		invAtIdx :=  u.invList[invIdx]
+		parts := strings.Split(invAtIdx, "--")
+		sProd.Id = parts[1]
+		sProd.Desc = parts[0]
+		sProd.BatchId = fmt.Sprintf("%v-%06d", sProd.Id, u.getRandomInteger(1, 10))
+		sS.Product = *sProd
+
+		sClient := new(ClientStruct)
+		sClient.Id = fmt.Sprintf("%06d", u.getRandomInteger(30, 67301))
+		// pick a random clientDemo
+		cDemo := u.clientDemoList[u.getRandomInteger(0, len(u.clientDemoList))]
+		sClient.Name = fmt.Sprintf("%v %v", cDemo.Name, cDemo.Surname)
+		sClient.Gender = cDemo.Gender
+		// pick a random occupation
+		oDemo := u.occupationList[u.getRandomInteger(0, len(u.occupationList))]
+		sClient.Occupation = oDemo
+		sS.Client = *sClient
+
+		sLoc := new(LocationStruct)
+		lDemo := u.locationList[u.getRandomInteger(0, len(u.locationList))]
+		sLoc.Name = lDemo.Name
+		sLoc.Id = lDemo.ID
+		sLoc.PostCode = lDemo.Postcode
+		sLoc.Lat = lDemo.Lat
+		sLoc.Lng = lDemo.Lng
+		sS.Location = *sLoc
+
+		salesList = append(salesList, *sS)
+	}
+	return
+}
 
 // models
 
@@ -314,6 +371,7 @@ func (u *generatorUtil) prepareRandomData() {
 		panic(err)
 	}
 	err = json.Unmarshal(bContent, &u.clientDemoList)
+// TODO: add also the clientId... (in the new phase)
 	if err != nil {
 		panic(err)
 	}
