@@ -28,7 +28,10 @@ PUT _template/m_supermarket_inventory
             "type": "keyword"
           },
           "desc": {
-            "type": "text"
+            "type": "text",
+            "fields": {
+              "raw": {"type": "keyword"}
+            }
           },
           "batch_id": {
             "type": "keyword"

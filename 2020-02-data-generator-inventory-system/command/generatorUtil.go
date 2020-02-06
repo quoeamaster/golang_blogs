@@ -29,11 +29,11 @@ import (
 )
 
 type generatorUtil struct {
-	invList []string
-	locationList []PlacemarkStruct
+	invList []string				// PS. prepared during GenTrx
+	locationList []PlacemarkStruct	// PS. loaded on demand -> u.loadPlacemartList(source, filename)
 
-	clientDemoList []clientDemo
-	occupationList []string
+	clientDemoList []clientDemo		// prepared during init -> prepareRandomData()
+	occupationList []string			// prepared during init -> prepareRandomData()
 
 }
 func NewGeneratorUtil() (instance *generatorUtil) {

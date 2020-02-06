@@ -16,8 +16,12 @@ limitations under the License.
 package command
 
 import (
+	"context"
+	"fmt"
 	"github.com/elastic/go-elasticsearch/v7"
+	"github.com/elastic/go-elasticsearch/v7/esapi"
 	"github.com/spf13/cobra"
+	"strings"
 )
 
 var genCmd = &cobra.Command{
@@ -87,11 +91,45 @@ func (c *GenerateCmdStruct) execute(cmd *cobra.Command, args []string)  {
 	return
 }
 
+const (
+	esIndexInventory = "m_supermarket_inventory"
+)
+
 func (c *GenerateCmdStruct) esInventoryIndex(data []InventoryTrxStruct) {
 	es, err := elasticsearch.NewDefaultClient()
 	CommonPanic(err)
 	// assume index template already available in the elasticsearch cluster
+	var bulkBuf strings.Builder
+
+	for _, iVal := range data {
+		bulkBuf.WriteString(`{"index":{}}
+`)
+		bulkBuf.WriteString(fmt.Sprintf(`{ "stock_in_price": %v, "stock_in_quantity": %v, "stock_in_date": "%v", "expiry_date": "%v", "product": { "id": "%v", "desc": "%v", "batch_id": "%v" }, "location": { "id": "%v", "name": "%v", "post_code": "%v", "coord": { "lat": %v, "lon": %v }}}
+`,
+			iVal.StockInCost, iVal.StockInQuantity,  GetESFormattedDate(iVal.StockInDate), GetESFormattedDate(iVal.ExpiryDate),
+			iVal.Product.Id, iVal.Product.Desc, iVal.Product.BatchId,
+			iVal.Location.Id, iVal.Location.Name, iVal.Location.PostCode, iVal.Location.Lat, iVal.Location.Lng))
+	}
+	bulkBuf.WriteString(`
+`)
+	req := esapi.BulkRequest{
+		Index: esIndexInventory,
+		Body: strings.NewReader(bulkBuf.String()),
+	}
+	response, err := req.Do(context.Background(), es)
+	CommonPanic(err)
+	defer response.Body.Close()
+	if response.IsError() {
+		panic(fmt.Sprintf("could not bulk ingest => %V", response.Status()))
+	}
+	rMap := ConvertESResponseToMap(*response)
+	fmt.Println(fmt.Sprintf("DONE bulk ingest on %v documents, took %vms with errors? %v", len(data), rMap["took"], rMap["errors"]))
 }
+
+
+
+
+
 
 
 // **** write to file command ****

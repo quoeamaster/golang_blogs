@@ -4,10 +4,10 @@
     <list default="true" id="477a6f69-dbf3-4bab-ad5a-bbc7bf266913" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2020-02-data-generator-inventory-system/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-02-data-generator-inventory-system/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2020-02-data-generator-inventory-system/command/common.go" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-02-data-generator-inventory-system/command/common.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2020-02-data-generator-inventory-system/command/generator.go" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-02-data-generator-inventory-system/command/generator.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2020-02-data-generator-inventory-system/command/generatorUtil.go" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-02-data-generator-inventory-system/command/generatorUtil.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../2020-02-data-generator-inventory-system/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-02-data-generator-inventory-system/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../2020-02-data-generator-inventory-system/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-02-data-generator-inventory-system/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2020-02-data-generator-inventory-system/datasource/es_index_templates.md" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-02-data-generator-inventory-system/datasource/es_index_templates.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -96,7 +96,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -113,6 +112,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -141,7 +141,7 @@
     <frame x="0" y="23" width="1680" height="1027" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26800978" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27106228" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />

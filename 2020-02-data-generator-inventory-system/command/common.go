@@ -15,8 +15,27 @@ limitations under the License.
 */
 package command
 
+import (
+	"encoding/json"
+	"github.com/elastic/go-elasticsearch/v7/esapi"
+	"time"
+)
+
 func CommonPanic(err error) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+// common method to parse a esapi response into map[string]interface{}
+func ConvertESResponseToMap(r esapi.Response) map[string]interface{} {
+	var m map[string]interface{}
+	if err := json.NewDecoder(r.Body).Decode(&m); err != nil {
+		CommonPanic(err)
+	}
+	return m
+}
+
+func GetESFormattedDate(d time.Time) string {
+	return d.Format("2006-01-02T15:04:05")
 }
