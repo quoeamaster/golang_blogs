@@ -16,23 +16,196 @@ limitations under the License.
 package command
 
 import (
+	"bufio"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
+	"math"
+	"math/rand"
 	"net/http"
+	"os"
+	"strings"
 	"time"
 )
 
 type generatorUtil struct {
+	invList []string
+	locationList []PlacemarkStruct
+
+	clientDemoList []clientDemo
+	occupationList []string
 
 }
 func NewGeneratorUtil() (instance *generatorUtil) {
 	instance = new(generatorUtil)
-	prepareRandomData()
+	instance.prepareRandomData()
 	return
 }
 
-func (u *generatorUtil) GenInventoryTrx() {
+const (
+	srcInventoryBaseFilename = "inventory_base.txt"
+	srcOnlineSalesCsv = "sourceOnlineSales.csv"
+)
 
+func (u *generatorUtil) GenTrx(source, filename, profile string, size int16) (resp *EntryResponse) {
+	resp = new(EntryResponse)
+	resp.Profile = profile
+
+	if strings.Compare(genProfileInventory, profile) == 0 {
+		invList := u.generateInventoryTrx(source, filename)
+		resp.InventoryList = invList
+		// TODO: write to file... for TESTING only
+		//bContent, err := json.Marshal(invList)
+		//CommonPanic(err)
+
+		//err = ioutil.WriteFile(fmt.Sprintf("%v%vtest.json", source, string(os.PathSeparator)), bContent, 0755)
+		//CommonPanic(err)
+
+
+	}
+	// TODO: other profiles (all, sales)
+	return
+}
+func (u *generatorUtil) generateInventoryTrx(source, filename string) (inventoryList []InventoryTrxStruct) {
+	// read all entries from Online Sales.csv... create the inventory list
+	// save the list to "inventory_base.txt" => 1 line with "," separated
+	if len(u.invList) == 0 {
+		u.invList = u.getInventoryList(source, filename)
+		fmt.Println("*** not yet filled")
+	}
+	// load locations
+	u.locationList = u.loadPlacemartList(source, filename)
+
+	for _, inv := range u.invList {
+		eInv := new(InventoryTrxStruct)
+		eInv.StockInCost = u.getRandomFloat32(20, 160)
+		eInv.StockInQuantity = int32(u.getRandomInteger(500, 10000))
+		eInv.StockInDate = u.getRandomDate(180, 365)
+		eInv.ExpiryDate = eInv.StockInDate.Add( time.Hour * time.Duration(24 * u.getRandomInteger(365, 730)) )
+
+		product := new(ProductStruct)
+		prodIdParts := strings.Split(inv, "--")
+
+		product.Desc = prodIdParts[0]
+		product.Id = prodIdParts[1]
+		product.BatchId = fmt.Sprintf("%v-%06d", product.Id, u.getRandomInteger(1, 10))
+		eInv.Product = *product
+
+		// random get location
+		iLocIdx := u.getRandomInteger(0, len(u.locationList))
+		loc := u.locationList[iLocIdx]
+
+		location := new(LocationStruct)
+		location.Id = loc.ID
+		location.Name = loc.Name
+		location.PostCode = loc.Postcode
+		location.Lat = loc.Lat
+		location.Lng = loc.Lng
+		eInv.Location = *location
+
+		inventoryList = append(inventoryList, *eInv)
+	}
+	return inventoryList
+}
+// reusable method for generating Inventory and Sales entries.
+// The return list contains the inventory information for building both types of trx
+func (u *generatorUtil) getInventoryList(source, filename string) (invList []string) {
+	// a. check if a previous run has created teh inventory_base.txt (no need to re-parse the whole Online sales.csv again
+	baseFilename := fmt.Sprintf("%v%v%v", source, string(os.PathSeparator), srcInventoryBaseFilename)
+	_, err := os.Stat(baseFilename)
+	if err == nil || os.IsExist(err) {
+		// load the contents back to memory and start working...
+		fHandle, err := os.OpenFile(baseFilename, os.O_RDONLY, 0755)
+		if err != nil {
+			panic(err)
+		}
+		defer fHandle.Close()
+
+		bContents, err := ioutil.ReadAll(fHandle)
+		if err != nil {
+			panic(err)
+		}
+		invList = strings.Split(string(bContents), ",")
+
+	} else {
+		sourceFile := fmt.Sprintf("%v%v%v", source, string(os.PathSeparator), srcOnlineSalesCsv)
+		invList, err = u.parseSourceOnlineSalesCsv(sourceFile)
+		if err != nil {
+			panic(err)
+		}
+		finalContent := strings.Join(invList, ",")
+		// write to base file
+		err = ioutil.WriteFile(baseFilename, []byte(finalContent), 0755)
+		if err != nil {
+			panic(err)
+		}
+	}
+	return
+}
+
+// parsing the source file sourceOnlineSales.csv
+func (u *generatorUtil) parseSourceOnlineSalesCsv(filename string) (invList []string, err error) {
+	fHandle, err := os.OpenFile(filename, os.O_RDONLY, 0755)
+	if err != nil {
+		return
+	}
+	defer fHandle.Close()
+
+	invMap := make(map[string]bool)
+
+	scanner := bufio.NewScanner(fHandle)
+	for scanner.Scan() {
+		parts := strings.Split(scanner.Text(), ",")
+		if len(parts) > 3 {
+			// only story unique values
+			iVal := parts[2]
+			if strings.Compare("Description", iVal) == -1 && invMap[iVal] == false {
+				invMap[iVal] = true
+				invList = append(invList, iVal)
+			}
+		}
+	}
+	// add back the generated Id
+	prodIdMap := make(map[string]bool)
+	for idx, prod := range invList {
+		prodId := u.getRandomId("", idx)
+		// check uniqueness?
+		if prodIdMap[prodId] == false {
+			prodIdMap[prodId] = true
+			invList[idx] = prod + "--" +prodId
+		} else {
+			for true {
+				prodId := u.getRandomId("", idx)
+				if prodIdMap[prodId] == false {
+					prodIdMap[prodId] = true
+					invList[idx] = prod + "--" + prodId
+					break
+				}
+			}
+		}
+	}
+	return
+}
+
+func (u *generatorUtil) getRandomInteger(lower, upper int) (value int) {
+	return rand.Intn(upper - lower) + lower
+}
+func (u *generatorUtil) getRandomFloat32(lower, upper float32) (value float32) {
+	fV := rand.Float32()*(upper - lower) + lower
+	return float32(math.Round(float64(fV) * 100) / 100)
+}
+func (u *generatorUtil) getRandomDate(lower, upper int) time.Time {
+	cDate := time.Now()
+	iDays := u.getRandomInteger(lower, upper)
+
+	cDate = cDate.Add(-1 * (time.Hour * time.Duration(24*iDays)) )
+	return cDate
+}
+func (u *generatorUtil) getRandomId(category string, seed int) (id string) {
+	d := int(time.Now().UnixNano())
+	id = fmt.Sprintf("%v", int(math.Round(rand.Float64() * float64(d)))+seed )
+
+	return
 }
 
 // InvoiceNo,StockCode,Description,Quantity,InvoiceDate,UnitPrice,CustomerID,Country (Online Sales.csv)
@@ -43,14 +216,34 @@ func (u *generatorUtil) GenSalesTrx() {
 
 }
 
+// load the placemart info - a.k.a. location list
+func (u *generatorUtil) loadPlacemartList(source, file string) (locations []PlacemarkStruct) {
+	fname := fmt.Sprintf("%v%v%v_prepared.json", source, string(os.PathSeparator), file)
+	_, err := os.Stat(fname)
+	if err != nil && os.IsNotExist(err) {
+		panic(err)
+	}
+	fHandle, err := os.OpenFile(fname, os.O_RDONLY, 0755)
+	CommonPanic(err)
+	defer fHandle.Close()
+
+	bContent, err := ioutil.ReadAll(fHandle)
+	CommonPanic(err)
+
+	err = json.Unmarshal(bContent, &locations)
+	CommonPanic(err)
+
+	return
+}
+
 
 // models
 
 type InventoryTrxStruct struct {
-	StockInCost float32 `json:"stock_in_cost"`
-	StockInQuantity int32 `json:"stock_in_quantity"`
-	StockInDate time.Time `json:"stock_in_date"`
-	ExpiryDate time.Time `json:"expiry_date"`
+	StockInCost float32 `json:"stock_in_cost"`  		// range : 20 ~ 160
+	StockInQuantity int32 `json:"stock_in_quantity"`	// range : 500 ~ 10000
+	StockInDate time.Time `json:"stock_in_date"`		// range : 180 to 365 days earlier
+	ExpiryDate time.Time `json:"expiry_date"`			// above date + 365 ~ 730 days
 
 	Product ProductStruct `json:"product"`
 
@@ -72,10 +265,11 @@ type ProductStruct struct {
 }
 
 type SalesTrxStruct struct {
-	Date time.Time `json:"date"`
+	Date time.Time `json:"date"`				// within 24 hours of current time
+	SellingPrice float32 `json:"selling_price"`	// random 20 ~ 160
+	Quantity int32 `json:"quantity"`			// random 1 ~ 20
+
 	Product ProductStruct `json:"product"`
-	SellingPrice float32 `json:"selling_price"`
-	Quantity int32 `json:"quantity"`
 
 	Client ClientStruct `json:"client"`
 
@@ -94,18 +288,22 @@ type clientDemo struct {
 	Surname string `json:"surname"`
 	Gender string `json:"gender"`
 }
-var clientDemoList []clientDemo
-var occupationList []string
 
+// response model to encapsulate all generated entries
+type EntryResponse struct {
+	Profile string
+	InventoryList []InventoryTrxStruct
+	SalesList []SalesTrxStruct
+}
 
 // prepare the static data for the generation
-func prepareRandomData() {
+func (u *generatorUtil) prepareRandomData() {
 	/*clientDemoList = []clientDemo{
 		clientDemo{ name: "a" },
 	}*/
 
 	// get random name + gender through api https://uinames.com/api/?amount=100
-	resp, err := http.Get("https://uinames.com/api/?amount=100")
+	resp, err := http.Get("https://uinames.com/api/?amount=200")
 	if err != nil {
 		panic(err)
 	}
@@ -115,12 +313,12 @@ func prepareRandomData() {
 	if err != nil {
 		panic(err)
 	}
-	err = json.Unmarshal(bContent, &clientDemoList)
+	err = json.Unmarshal(bContent, &u.clientDemoList)
 	if err != nil {
 		panic(err)
 	}
 
-	occupationList = []string{
+	u.occupationList = []string{
 		"accountant",
 		"actor",
 		"actuary",

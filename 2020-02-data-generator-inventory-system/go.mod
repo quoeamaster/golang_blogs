@@ -3,6 +3,7 @@ module github.com/quoeamaster/golang_blogs
 go 1.13
 
 require (
+	github.com/elastic/go-elasticsearch/v7 v7.5.1-0.20200204134032-fe1e7ab9b577
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/pelletier/go-toml v1.6.0 // indirect
 	github.com/spf13/afero v1.2.2 // indirect

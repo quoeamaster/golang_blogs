@@ -15,7 +15,10 @@ limitations under the License.
 */
 package command
 
-import "github.com/spf13/cobra"
+import (
+	"github.com/elastic/go-elasticsearch/v7"
+	"github.com/spf13/cobra"
+)
 
 var genCmd = &cobra.Command{
 	Use:   "generate",
@@ -29,6 +32,12 @@ Use 'file' command to write results to files instead.
 		c.execute(cmd, args)
 	},
 }
+
+const (
+	genProfileInventory = "inventory"
+	genProfileSales     = "sales"
+	genProfileAll       = "all"
+)
 
 func init() {
 	genCmd.AddCommand(genToFileCmd)
@@ -44,6 +53,8 @@ func init() {
 	// heyCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	genCmd.PersistentFlags().StringP("source", "s", "datasource", "the folder containing the kml OR geojson files")
 	genCmd.PersistentFlags().StringP("filename", "f", "location", "the name of the kml OR geojson files, e.g. filename=abc then abc.kml OR abc.geojson is expected")
+	genCmd.PersistentFlags().StringP("profile", "p", genProfileInventory, "profile refers to which dataset to generate, valid option are 'inventory', 'sales' OR 'all'.")
+	genCmd.PersistentFlags().Int16("size", 5, "number of records to create on SALES trx only; for inventory profile, this value is ignored")
 
 	genCmd.Flags().StringP("elastichost", "", "http://localhost:9200", "elasticsearch host to connect to")
 }
@@ -53,9 +64,33 @@ type GenerateCmdStruct struct {
 }
 func (c *GenerateCmdStruct) execute(cmd *cobra.Command, args []string)  {
 	gUtil := NewGeneratorUtil()
-	gUtil.GenInventoryTrx()
+	s, err := cmd.PersistentFlags().GetString("source")
+	CommonPanic(err)
+
+	f, err := cmd.PersistentFlags().GetString("filename")
+	CommonPanic(err)
+
+	p, err := cmd.PersistentFlags().GetString("profile")
+	CommonPanic(err)
+
+	size, err := cmd.PersistentFlags().GetInt16("size")
+	CommonPanic(err)
+
+	// generate the entries
+	entryResponse := gUtil.GenTrx(s, f, p, size)
+	switch p {
+	case genProfileInventory:
+		c.esInventoryIndex(entryResponse.InventoryList)
+	}
+
 
 	return
+}
+
+func (c *GenerateCmdStruct) esInventoryIndex(data []InventoryTrxStruct) {
+	es, err := elasticsearch.NewDefaultClient()
+	CommonPanic(err)
+	// assume index template already available in the elasticsearch cluster
 }
 
 
