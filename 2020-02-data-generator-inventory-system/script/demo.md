@@ -1,4 +1,11 @@
 
+
+
+
+
+
+# supermarket
+
 GET _cat/indices?h=index&s=index
 
 GET _template
@@ -161,7 +168,9 @@ GET m_supermarket_inventory/_search
     }
   }
 }
-GET m_supermarket_inventory/_search
+
+# different supermarket's inventory data
+GET m_supermarket_inventory/_search?filter_path=hits.total.value,aggregations.NAME.buckets.key,aggregations.NAME.buckets.doc_count,aggregations.NAME.buckets.NAME.hits.hits._source
 {
   "size": 0, 
   "aggs": {
@@ -211,6 +220,7 @@ GET m_supermarket_inventory/_search
   }
 }
 
+# sales information (finally)
 GET m_supermarket_sales/_search
 {
   "query": {
@@ -229,18 +239,15 @@ GET m_supermarket_sales/_search
   "size": 0,
   "aggs": {
     "NAME": {
-      "date_histogram": {
-        "field": "date",
-        "interval": "hour",
-        "order": {
-          "max_qty": "desc"
-        }
+      "auto_date_histogram": {
+        "field": "date"
       },
       "aggs": {
         "shop": {
           "terms": {
             "field": "location.name.raw",
-            "size": 4
+            "size": 4,
+            "min_doc_count": 1
           }
         },
         "max_qty": {
@@ -256,23 +263,7 @@ GET m_supermarket_sales/_search
 
 
 
-GET test/_search
-DELETE test
-POST test/_bulk
-{"index":{}}
-{ "date": "2020-02-06T03:21:20","selling_price": 151.67,"quantity": 10, "product": { "id": "744812677152088247","desc": "EAU DE NILE JEWELLED PHOTOFRAME","batch_id": "744812677152088247-000005"}, "client": { "id": "024673","name": "Βιθυνός Νικολάκος","gender": "","occupation": "mail superintendent"}, "location": { "id": "kml_213","name": "NTUC FAIRPRICE CO-OPERATIVE LTD","post_code": "169252","coord": { "lat": 1.2848073, "lon": 103.8293}}}
 
-GET test/_search
-
-{
-  "query": {
-    "range": {
-      "expiry_date": {
-        "gt": "2021-04-18T18:02:07"
-      }
-    }
-  }
-}
 
 
 
