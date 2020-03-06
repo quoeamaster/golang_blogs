@@ -13,3 +13,6 @@
 
 # all portrait_repo related data / test files
 2019-11-rest-api/webapp/portrait_repo/*
+
+# executable for task-app
+2020-03-gui-task-app/taskApp
