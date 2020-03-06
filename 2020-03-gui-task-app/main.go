@@ -17,6 +17,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/quoeamaster/golang_blogs/app"
 	"github.com/zserge/lorca"
 	"net"
 	"net/http"
@@ -29,9 +30,13 @@ func main()  {
 	prepareArgsForLorcaBootstrap(args)
 
 	// create and launch the app
-	ui, err := lorca.New("", "", 480, 320, args...)
+	ui, err := lorca.New("", "", 800, 600, args...)
 	genericErrHandler(err, "initializing the app UI")
 	defer ui.Close()
+
+	// init the app model
+	appPtr := initApp(ui)
+	fmt.Println("app model:", appPtr)
 
 	// connect to FS (fileServer pointing to folder www)
 	listener, err := net.Listen("tcp", "127.0.0.1:0")
@@ -55,4 +60,12 @@ func main()  {
 	fmt.Println("Thanks for using the app!")
 }
 
+func initApp(ui lorca.UI) (appPtr *app.App) {
+	err := ui.Bind("onStart", func() {
+		appPtr.OnStart()
+	})
+	genericErrHandler(err, "binding onStart event")
+
+	return
+}
 

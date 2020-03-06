@@ -1,0 +1,82 @@
+/*
+ *  common
+ */
+.core-pointer {
+    cursor: pointer;
+}
+
+
+/*
+ *  main app container css
+ */
+
+.app-container {
+    /* background-image: linear-gradient(-45deg, rgba(241,241,241,0), rgba(200,201,199,1)); */
+    /* background-image: linear-gradient(to right, rgba(241,241,241,0), rgba(66,66,66,1)); */
+    background-image: linear-gradient(to right, rgba(241,241,241,0), rgba(200,201,199,1));
+}
+.app-menu {
+    padding-left: 8px;
+    padding-right: 8px;
+
+    height: 30px;
+    line-height: 30px;
+    vertical-align: center;
+
+    box-shadow: 0 3px 5px #cccccc;
+}
+.app-menu-item {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.app-today-container {
+    text-align: center;
+    font-size: 25px;
+    font-family: "Comic Sans MS";
+}
+
+/*
+ *  side menu's css
+ */
+
+.side-menu-container {
+    width: 0;
+    height: 100%;
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    background-color: black;
+    color: white;
+    overflow: scroll;
+    transition: 0.5s;
+}
+.side-menu-container-width {
+    width: 250px;
+}
+.side-menu-caption {
+    height: 50px;
+    line-height: 50px;
+    vertical-align: center;
+    font-size: 25px;
+    padding-left: 16px;
+}
+.side-menu-close {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+.side-menu-item {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+.side-menu-item:hover {
+    color: #f1f1f1;
+}

@@ -2,21 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4a412401-95ac-462e-8a5d-6d0d4151bb5e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/.idea/2020-03-gui-task-app.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/Util.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/go.mod" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/go.sum" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/main.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/scripts/build.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/tasksApp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../2019-11-rest-api/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../2019-11-rest-api/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/app/App.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/other_resources/memo_f.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/www/asset/css/app.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/www/asset/license_for_pics.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/www/asset/memo.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/www/asset/memo_f_trans.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/www/component/app.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/www/component/sideMenu.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/assets.go" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/assets.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/tasksApp" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/tasksApp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/www/asset/memo_background.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/other_resources/memo_background.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/www/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/www/index.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

@@ -4,10 +4,61 @@
     <title>your daily task app!</title>
     <link rel="shortcut icon" href="asset/favicon.png">
 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script> <!-- vue -->
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script> <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script> <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/js/mdb.min.js"></script> <!-- MDB core JavaScript -->
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"> <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/css/mdb.min.css" rel="stylesheet"> <!-- Material Design Bootstrap -->
+
+    <!-- app specific resources -->
+
+    <!-- load back all vue related components; app.js MUST be the last one -->
+
+
+    <link href="asset/css/app.css" rel="stylesheet"> <!-- app css -->
+    <link href="asset/css/app_other_dimension.css" rel="stylesheet"> <!-- app other dimension css -->
+
 </head>
 
-<body>
+<body onload=onStart() class="app-container">
+    <!--
     hi there~ showing you this
+    <button class="btn btn-primary">primary button here</button>
+    <p/>
     <img src="asset/memo_background.jpg">
+    -->
+    <div id="app">
+        <!-- app header -->
+        <div class="app-menu">
+            <div class="float-left">
+                <i class="fas fa-bars fa-fw core-pointer app-menu-item"
+                   v-on:click="onMenuClick"></i>
+            </div>
+            <div class="float-right">
+                <i class="fas fa-trash-alt fa-fw core-pointer app-menu-item"></i>
+                <i class="fas fa-edit fa-fw core-pointer app-menu-item"
+                   v-on:click="onUpsertMemo"></i>
+                <i class="fas fa-info-circle fa-fw core-pointer app-menu-item"
+                   v-on:click="onMenuClick"></i>
+            </div>
+        </div>
+        <!-- side menu container -->
+        <side-menu v-on:update-show-side-menu="onUpdateShowSideMenu"
+                   v-bind:show="showSideMenu"></side-menu>
+
+        <div class="app-today-container">{{todayInString}}</div>
+
+    </div>
+
+    <!-- load back all vue related components; app.js MUST be the last one -->
+    <script type="text/javascript" src="component/sideMenu.js"></script>
+    <script type="text/javascript" src="component/app.js"></script>
 </body>
 </html>
