@@ -55,9 +55,15 @@
 
         <div class="app-today-container">{{todayInString}}</div>
 
+        <!-- note creation dlg -->
+        <create-note-dlg v-bind:show="isContextMenuShowing"
+                         v-bind:today="todayInString"
+                         v-on:close-note-creation="onCloseNoteCreation"></create-note-dlg>
+
     </div>
 
     <!-- load back all vue related components; app.js MUST be the last one -->
+    <script type="text/javascript" src="component/createNoteDlg.js"></script>
     <script type="text/javascript" src="component/sideMenu.js"></script>
     <script type="text/javascript" src="component/app.js"></script>
 </body>

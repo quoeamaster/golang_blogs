@@ -7,6 +7,9 @@ new Vue({
 
             today: new Date(),
             todayInString: '',
+
+// TODO: are there any contextMenu showing
+            isContextMenuShowing: false,
         };
     },
     mounted: function() {
@@ -18,6 +21,14 @@ new Vue({
         this.todayInString += ((this.today.getMonth()+1)<10)?'0'+(this.today.getMonth()+1):this.today.getMonth()+1;
         this.todayInString += "-";
         this.todayInString += (this.today.getDate()<10)?'0'+this.today.getDate():this.today.getDate();
+
+// TODO: add back a click event to remove our custom contextMenu
+        window.addEventListener('click', function (event) {
+            if (this.isContextMenuShowing === true) {
+// TODO: HIDE it
+            }
+        });
+
     },
     methods: {
         /* ------------------ */
@@ -31,7 +42,10 @@ new Vue({
             this.showSideMenu = data;
         },
         onUpsertMemo: function () {
-            console.log('on-upsert');
+            this.isContextMenuShowing = true;
+        },
+        onCloseNoteCreation: function () {
+            this.isContextMenuShowing = false;
         }
 
 

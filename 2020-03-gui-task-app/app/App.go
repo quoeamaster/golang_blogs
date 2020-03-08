@@ -15,14 +15,58 @@ limitations under the License.
 */
 package app
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"os"
+)
+
+const defaultRepoLocation = "other_resources/notes.json"
+
 
 type App struct {
-
+	notes map[string]interface{}
 }
 
 func NewApp() (appPtr *App) {
 	appPtr = new(App)
+	appPtr.notes = make(map[string]interface{})
+
+	err := appPtr.loadNotesFromRepo()
+	if err != nil {
+		panic(err)
+	}
+fmt.Println(appPtr.notes, "###")
+	return
+}
+
+// load the notes repos / data-structure
+func (n *App) loadNotesFromRepo() (err error) {
+	// is the targeted repo file available?
+	_, err2 := os.Stat(defaultRepoLocation)
+	if os.IsNotExist(err2) == true {
+		err = ioutil.WriteFile(defaultRepoLocation, nil, 0644)
+		if err != nil {
+			return
+		}
+	} else {
+		// load the repo file
+		bContent, err2 := ioutil.ReadFile(defaultRepoLocation)
+		if err2 != nil {
+			err = err2
+			return
+		}
+
+		if len(bContent) > 0 {
+			// load / unmarshal
+			err2 = json.Unmarshal(bContent, &n.notes)
+			if err2 != nil {
+				err = err2
+				return
+			}
+		}
+	}
 	return
 }
 
@@ -32,5 +76,28 @@ func NewApp() (appPtr *App) {
  */
 func (n *App) OnStart() (err error) {
 	fmt.Println("app ready~")
+	return
+}
+
+
+/* ---------------------- */
+/*   business event(s)    */
+/* ---------------------- */
+
+/**
+ *	create note / task
+ */
+func (n *App) OnCreateNoteTask(content, todayInString string) (err error) {
+	//fmt.Println("tbd - save the note / task:", content, todayInString)
+	listing := n.notes[todayInString]
+	if listing == nil {
+		// TODO: create an array of interface{}
+
+	} else {
+		// append
+		// TODO: convert the object to array of interface{}
+	}
+
+
 	return
 }

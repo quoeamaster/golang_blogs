@@ -29,9 +29,14 @@ func genericErrHandler(err error, description ...string)  {
 	}
 }
 
+/**
+ *	prepare bootstrap arguments for different OS (for the moment, only Linux)
+ */
 func prepareArgsForLorcaBootstrap(args []string) []string {
 	if runtime.GOOS == "linux" {
 		args = append(args, "--class=Lorca")
 	}
 	return args
 }
+
+
