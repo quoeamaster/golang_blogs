@@ -125,6 +125,19 @@ func (n *App) OnCreateNoteTask(content, todayInString string) (err error, conten
 	return
 }
 
+
+// TODO: return all notes repo in string format... eval later on
+func (n *App) GetNotesRepoInString() (value string) {
+	return n.notesRepoToString(n.notes)
+}
+
+
+
+/* --------------------------- */
+/*    notes translation api    */
+/* --------------------------- */
+
+
 func (n *App) notesRepoToString(repo map[string][]map[string]interface{}) (value string) {
 	var b strings.Builder
 

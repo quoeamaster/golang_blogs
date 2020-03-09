@@ -25,6 +25,8 @@ import (
 	"os/signal"
 )
 
+const eventNotesAllLoaded = "go-notes-all-loaded"
+
 func main()  {
 	args := []string{}
 	prepareArgsForLorcaBootstrap(args)
@@ -73,9 +75,12 @@ func initApp(ui lorca.UI) (appPtr *app.App) {
 		// pass also parameters from javascript side...?
 		err2, notesInString := appPtr.OnCreateNoteTask(content, todayInString)
 		genericErrHandler(err2, "create note / task")
-		// TODO: eval and emit a global event window.eventBus.$emit('xxx-event', object) => use ui.Eval()
-		fmt.Println(notesInString)
+		// eval and emit a global event window.eventBus.$emit('xxx-event', object) => use ui.Eval()
+		jsCommand := fmt.Sprintf(
+			"window.eventBus.$emit('%v', JSON.parse('%v'));", eventNotesAllLoaded, notesInString)
+		// PS. debug -> fmt.Println(jsCommand)
 
+		ui.Eval(jsCommand)
 	})
 	genericErrHandler(err, "binding onStart event")
 

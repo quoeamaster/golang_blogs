@@ -10,12 +10,17 @@ new Vue({
 
             today: new Date(),
             todayInString: '',
+            chosenDateToDisplay: '',
+
+            notes: {},
 
 // TODO: are there any contextMenu showing
             isContextMenuShowing: false,
         };
     },
     mounted: function() {
+        window.eventBus.$on('go-notes-all-loaded', this.onGoNotesAllLoadedEvent);
+
         if (!this.today) {
             // should not happen though
             this.today = new Date();
@@ -24,6 +29,8 @@ new Vue({
         this.todayInString += ((this.today.getMonth()+1)<10)?'0'+(this.today.getMonth()+1):this.today.getMonth()+1;
         this.todayInString += "-";
         this.todayInString += (this.today.getDate()<10)?'0'+this.today.getDate():this.today.getDate();
+        // for JUST mounted -> today = chosen-date
+        this.chosenDateToDisplay = this.todayInString;
 
 // TODO: add back a click event to remove our custom contextMenu
         window.addEventListener('click', function (event) {
@@ -40,7 +47,6 @@ new Vue({
 
         onMenuClick: function () {
             this.showSideMenu = true;
-console.log(window.eventBus);
         },
         onUpdateShowSideMenu: function (data) {
             this.showSideMenu = data;
@@ -50,6 +56,10 @@ console.log(window.eventBus);
         },
         onCloseNoteCreation: function () {
             this.isContextMenuShowing = false;
+        },
+
+        onGoNotesAllLoadedEvent: function (data) {
+            this.notes = data;
         }
 
 

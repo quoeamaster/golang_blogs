@@ -53,16 +53,22 @@
         <side-menu v-on:update-show-side-menu="onUpdateShowSideMenu"
                    v-bind:show="showSideMenu"></side-menu>
 
-        <div class="app-today-container">{{todayInString}}</div>
+        <!-- default is TODAY -->
+        <div class="app-today-container">{{chosenDateToDisplay}}</div>
 
         <!-- note creation dlg -->
         <create-note-dlg v-bind:show="isContextMenuShowing"
                          v-bind:today="todayInString"
                          v-on:close-note-creation="onCloseNoteCreation"></create-note-dlg>
 
+        <!-- display the notes -->
+        <note v-for="note in notes[chosenDateToDisplay]"
+              v-bind:note="note"></note>
+
     </div>
 
     <!-- load back all vue related components; app.js MUST be the last one -->
+    <script type="text/javascript" src="component/note.js"></script>
     <script type="text/javascript" src="component/createNoteDlg.js"></script>
     <script type="text/javascript" src="component/sideMenu.js"></script>
     <script type="text/javascript" src="component/app.js"></script>
