@@ -1,3 +1,6 @@
+// create a global event-bus
+let eventBus = new Vue();
+window.eventBus = eventBus;
 
 new Vue({
     el: '#app',
@@ -37,6 +40,7 @@ new Vue({
 
         onMenuClick: function () {
             this.showSideMenu = true;
+console.log(window.eventBus);
         },
         onUpdateShowSideMenu: function (data) {
             this.showSideMenu = data;

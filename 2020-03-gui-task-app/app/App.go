@@ -89,7 +89,7 @@ func (n *App) OnStart() (err error) {
 /**
  *	create note / task
  */
-func (n *App) OnCreateNoteTask(content, todayInString string) (err error) {
+func (n *App) OnCreateNoteTask(content, todayInString string) (err error, contentsInString string) {
 	//fmt.Println("tbd - save the note / task:", content, todayInString)
 	var listOfMap []map[string]interface{}
 	listing := n.notes[todayInString]
@@ -120,7 +120,8 @@ func (n *App) OnCreateNoteTask(content, todayInString string) (err error) {
 	// write to file
 	notesInString := n.notesRepoToString(n.notes)
 	err = ioutil.WriteFile(defaultRepoLocation, []byte(notesInString), 0644)
-	
+
+	contentsInString = notesInString
 	return
 }
 
