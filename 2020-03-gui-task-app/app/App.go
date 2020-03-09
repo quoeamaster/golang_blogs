@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -89,7 +90,9 @@ func (n *App) OnStart() (err error) {
 /**
  *	create note / task
  */
-func (n *App) OnCreateNoteTask(content, todayInString string) (err error, contentsInString string) {
+func (n *App) OnCreateNoteTask(
+	content, todayInString string, x, y, angle string) (err error, contentsInString string) {
+
 	//fmt.Println("tbd - save the note / task:", content, todayInString)
 	var listOfMap []map[string]interface{}
 	listing := n.notes[todayInString]
@@ -113,6 +116,9 @@ func (n *App) OnCreateNoteTask(content, todayInString string) (err error, conten
 	// append
 	entry := make(map[string]interface{})
 	entry["content"] = content
+	entry["x"], _ = strconv.Atoi(x)
+	entry["y"], _ = strconv.Atoi(y)
+	entry["angle"], _ = strconv.Atoi(angle)
 
 	listOfMap = append(listOfMap, entry)
 	n.notes[todayInString] = listOfMap
@@ -126,7 +132,7 @@ func (n *App) OnCreateNoteTask(content, todayInString string) (err error, conten
 }
 
 
-// TODO: return all notes repo in string format... eval later on
+// return all notes repo in string format... eval later on
 func (n *App) GetNotesRepoInString() (value string) {
 	return n.notesRepoToString(n.notes)
 }

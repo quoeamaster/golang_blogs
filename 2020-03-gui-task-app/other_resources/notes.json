@@ -1,1 +1,1 @@
-{ "2020-03-09": [{ "content": "diy on curry veg" }] }
+{ "2020-03-09": [{ "x": 200, "y": 150, "angle": 15, "content": "diy on curry veg" }, { "angle": -15, "content": "have party at 7pm", "x": 400, "y": 50 }, { "content": "movies with wife (8pm)", "x": 50, "y": 75, "angle": -45 }] }

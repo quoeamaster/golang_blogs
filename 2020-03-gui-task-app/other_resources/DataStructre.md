@@ -7,10 +7,14 @@ A.
 {
  "2020-03-08": [
   {
-   "content": "DIY - curry vegetables (dinner)"
+   "content": "DIY - curry vegetables (dinner)",
+   "x": 100,
+   "y": 100,
+   "angle": 0
   },
   {
-    "content": "finish the iPhone app!"
+    "content": "finish the iPhone app!",
+    "x": 10, "y": 10, "angle": 45
   }
  ],
  "2020-03-09": [{...}, {...}]

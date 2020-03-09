@@ -19,6 +19,10 @@ new Vue({
         };
     },
     mounted: function() {
+        // get all notes from repo
+        window.onGetNotes();
+
+        // callback on getting notes OR after notes being updated (update the "notes" object)
         window.eventBus.$on('go-notes-all-loaded', this.onGoNotesAllLoadedEvent);
 
         if (!this.today) {

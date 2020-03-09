@@ -6,7 +6,10 @@ Vue.component('create-note-dlg', {
             exitEffects: ['rotateOut', 'rotateOutDownLeft', 'rotateOutDownRight', 'rotateOutUpLeft', 'rotateOutUpRight'],
             exitEffectChosen: '',
             note: {
-                content: ''
+                content: '',
+                x: null,
+                y: null,
+                angle: null
             }
         };
     },
@@ -42,7 +45,13 @@ Vue.component('create-note-dlg', {
         },
         onCreateEvent: function () {
             // create the note / task (etc) => calling Golang backend
-            window.onCreateNoteTask(this.note.content, this.today);
+            if (!this.note.x) { this.note.x = 0; }
+            if (!this.note.y) { this.note.y = 0; }
+            if (!this.note.angle) { this.note.angle = 0; }
+
+            window.onCreateNoteTask(this.note.content,
+                this.today,
+                this.note.x+'', this.note.y+'', this.note.angle+'');
 
             // add exit effect
             this.exitEffectChosen = this.getRandomExitClass();
@@ -90,10 +99,19 @@ Vue.component('create-note-dlg', {
         <!-- main content -->
         <div class="note-cr-content-outer-container">
             <div class="note-cr-content-inner-container">
+                <div class="note-cr-flex3-row">
+                    <input type="text" class="form-control note-cr-flex3-text" v-model="note.x" 
+                        style="width: auto;"  placeholder="x / left position" />
+                    <input type="text" class="form-control note-cr-flex3-text" v-model="note.y" 
+                        style="width: auto;"  placeholder="y / top position" />
+                    <input type="text" class="form-control note-cr-flex3-text" v-model="note.angle" 
+                        style="width: auto;"  placeholder="angle" />
+                </div>
+                
                 <textarea placeholder="task / note content..."
                           style="margin-top: 8px;" 
                           v-model="note.content"
-                          class="form-control note-cr-content" rows="4"></textarea>    
+                          class="form-control note-cr-content" rows="4"></textarea>
             </div>
         </div>
         

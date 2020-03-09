@@ -140,4 +140,41 @@
 .note-cr-content-inner-container {
     overflow: hidden;
 }
+.note-cr-flex3-row {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+}
+.note-cr-flex3-text {
+    border-radius: 4px;
+    padding: 6px;
+}
 
+
+/**
+ *  note instance
+ */
+.note-container {
+    position: absolute;
+    width: 200px;
+    height: 210px;
+    background-image: url("../memo.jpg");
+    background-size: cover;
+}
+.note-inner-container {
+    padding: 20px;
+    width: 100%;
+    /*
+    height: 210px;
+    line-height: 210px;
+    */
+    vertical-align: middle;
+    text-align: center;
+
+    font-family: "Comic Sans MS";
+    font-size: 1.2em;
+
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+}

@@ -71,9 +71,9 @@ func initApp(ui lorca.UI) (appPtr *app.App) {
 	genericErrHandler(err, "binding onStart event")
 
 	// OnCreateNoteTask
-	err = ui.Bind("onCreateNoteTask", func(content, todayInString string) {
+	err = ui.Bind("onCreateNoteTask", func(content, todayInString string, x, y, angle string) {
 		// pass also parameters from javascript side...?
-		err2, notesInString := appPtr.OnCreateNoteTask(content, todayInString)
+		err2, notesInString := appPtr.OnCreateNoteTask(content, todayInString, x, y, angle)
 		genericErrHandler(err2, "create note / task")
 		// eval and emit a global event window.eventBus.$emit('xxx-event', object) => use ui.Eval()
 		jsCommand := fmt.Sprintf(
@@ -85,6 +85,12 @@ func initApp(ui lorca.UI) (appPtr *app.App) {
 	genericErrHandler(err, "binding onStart event")
 
 
+	err = ui.Bind( "onGetNotes", func() {
+		notesInString := appPtr.GetNotesRepoInString()
+		jsCommand := fmt.Sprintf(
+			"window.eventBus.$emit('%v', JSON.parse('%v'));", eventNotesAllLoaded, notesInString)
+		ui.Eval(jsCommand)
+	})
 
 
 	return
