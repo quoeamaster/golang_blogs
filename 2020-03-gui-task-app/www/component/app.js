@@ -13,6 +13,7 @@ new Vue({
             chosenDateToDisplay: '',
 
             notes: {},
+            //chosenNotes: {},
 
 // TODO: are there any contextMenu showing
             isContextMenuShowing: false,
@@ -35,6 +36,8 @@ new Vue({
         this.todayInString += (this.today.getDate()<10)?'0'+this.today.getDate():this.today.getDate();
         // for JUST mounted -> today = chosen-date
         this.chosenDateToDisplay = this.todayInString;
+        //this.chosenNotes = this.notes[this.chosenDateToDisplay];
+
 
 // TODO: add back a click event to remove our custom contextMenu
         window.addEventListener('click', function (event) {
@@ -67,7 +70,19 @@ new Vue({
             // translate the above new date back to string and update the "chosenDateToDisplay" variable
             // load the corresponding notes as well... (usually no need to trigger another golang operation since the notes are already in memory)
             let dParts = this.chosenDateToDisplay.split("-");
-            
+            if (dParts.length === 3) {
+                let month = parseInt(dParts[1], 10) - 1;
+                let dChosen = new Date(parseInt(dParts[0], 10), month, parseInt(dParts[2], 10), 0,0,0);
+
+                dChosen.setDate(dChosen.getDate() + delta);
+                let dChosenInString = dChosen.getFullYear() + '-';
+                dChosenInString += ((dChosen.getMonth()+1)<10)?"0"+(dChosen.getMonth()+1):dChosen.getMonth()+1;
+                dChosenInString += "-";
+                dChosenInString += ((dChosen.getDate())<10)?"0"+(dChosen.getDate()):dChosen.getDate();
+
+                this.chosenDateToDisplay = dChosenInString;
+                //this.chosenNotes = this.notes[this.chosenDateToDisplay];
+            }
 
         },
 

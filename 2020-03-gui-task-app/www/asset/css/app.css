@@ -11,6 +11,51 @@
     display: none;
 }
 
+
+/*
+ *  splash screen
+ */
+.splash-container {
+    z-index: 15; /* Sit on top */
+    left: 0;
+    top: 0;
+
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    position: fixed; /* Stay in place */
+
+    /* display: none; */
+    overflow: auto; /* Enable scroll if needed */
+
+    background-color: rgba(200,201,199,1);
+}
+.splash-inner-container {
+    width: 600px;
+    /*
+    height: 600px;
+    line-height: 600px;
+    vertical-align: middle;
+    */
+    text-align: center;
+    margin: auto;
+}
+.splash-caption {
+    font-family: "Comic Sans MS";
+    font-size: 2.0em;
+}
+.splash-progress-container {
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 100%;
+    background-color: azure;
+}
+.splash-progress-bar {
+    width: 1%;
+    height: 30px;
+    background-color: green;
+}
+
+
 /*
  *  main app container css
  */
