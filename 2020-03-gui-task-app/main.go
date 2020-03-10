@@ -79,6 +79,7 @@ func initApp(ui lorca.UI) (appPtr *app.App) {
 		jsCommand := fmt.Sprintf(
 			"window.eventBus.$emit('%v', JSON.parse('%v'));", eventNotesAllLoaded, notesInString)
 		// PS. debug -> fmt.Println(jsCommand)
+fmt.Println(jsCommand)
 
 		ui.Eval(jsCommand)
 	})

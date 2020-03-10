@@ -127,14 +127,14 @@ func (n *App) OnCreateNoteTask(
 	notesInString := n.notesRepoToString(n.notes)
 	err = ioutil.WriteFile(defaultRepoLocation, []byte(notesInString), 0644)
 
-	contentsInString = notesInString
+	contentsInString = strings.Replace(notesInString, "\n", "", -1)
 	return
 }
 
 
 // return all notes repo in string format... eval later on
 func (n *App) GetNotesRepoInString() (value string) {
-	return n.notesRepoToString(n.notes)
+	return strings.Replace(n.notesRepoToString(n.notes), "\n", "", -1)
 }
 
 
@@ -146,9 +146,14 @@ func (n *App) GetNotesRepoInString() (value string) {
 
 func (n *App) notesRepoToString(repo map[string][]map[string]interface{}) (value string) {
 	var b strings.Builder
+	// index on the key (dates in this case)
+	dateIdx := 0
 
 	fmt.Fprintf(&b, "{ ")
 	for key, val := range repo {
+		if dateIdx > 0 {
+			fmt.Fprintf(&b, ",\n")
+		}
 		fmt.Fprintf(&b, "\"%v\": [", key)
 		// list of map (notes content)
 		for idx, noteObject := range val {
@@ -158,6 +163,8 @@ func (n *App) notesRepoToString(repo map[string][]map[string]interface{}) (value
 			fmt.Fprintf(&b, n.noteToString(noteObject, true))
 		} // end -- for ( [] -> map[string]interface{} level)
 		fmt.Fprintf(&b, "]")
+
+		dateIdx++
 	} // end -- for ( date -> []map[string]interface{} level)
 
 	fmt.Fprintf(&b, " }")

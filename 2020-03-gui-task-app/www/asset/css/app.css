@@ -40,6 +40,11 @@
     font-size: 25px;
     font-family: "Comic Sans MS";
 }
+.app-today-direction {
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
 
 /*
  *  side menu's css
@@ -159,6 +164,10 @@
     width: 200px;
     height: 210px;
     background-image: url("../memo.jpg");
+    background-size: cover;
+}
+.note-container:hover {
+    background-image: url("../memo_f_trans.png");
     background-size: cover;
 }
 .note-inner-container {

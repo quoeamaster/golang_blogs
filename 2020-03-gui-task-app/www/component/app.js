@@ -61,9 +61,25 @@ new Vue({
         onCloseNoteCreation: function () {
             this.isContextMenuShowing = false;
         },
+        onDateChangeByDelta: function (delta) {
+            // chosenDateToDisplay => convert back to date object
+            // add the above date with the delta
+            // translate the above new date back to string and update the "chosenDateToDisplay" variable
+            // load the corresponding notes as well... (usually no need to trigger another golang operation since the notes are already in memory)
+            let dParts = this.chosenDateToDisplay.split("-");
+            
+
+        },
+
+
+        /* ------------------------------ */
+        /*    golang interfacing event    */
+        /* ------------------------------ */
 
         onGoNotesAllLoadedEvent: function (data) {
             this.notes = data;
+            // TODO: debug =>
+            // console.log('** inside notesLoaded', data);
         }
 
 

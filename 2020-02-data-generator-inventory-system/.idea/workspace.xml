@@ -7,15 +7,12 @@
       <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/app/App.go" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/app/App.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/assets.go" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/assets.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/other_resources/DataStructre.md" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/other_resources/DataStructre.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/other_resources/notes.json" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/other_resources/notes.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/tasksApp" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/tasksApp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/www/asset/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/www/asset/css/app.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/www/asset/memo.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/www/asset/memo.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/www/asset/memo_f_trans.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/www/asset/memo_f_trans.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/www/component/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/www/component/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/www/component/createNoteDlg.js" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/www/component/createNoteDlg.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/www/component/note.js" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/www/component/note.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/www/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/www/index.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -185,7 +182,7 @@
     <frame x="0" y="23" width="1680" height="1027" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.3009768" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.30463982" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />

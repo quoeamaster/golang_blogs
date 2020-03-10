@@ -79,6 +79,9 @@ Vue.component('create-note-dlg', {
             setTimeout(function () {
                 // reset the form
                 instance.note.content = '';
+                instance.note.x = null;
+                instance.note.y = null;
+                instance.note.angle = null;
                 instance.raiseCloseDlgEvent();
                 instance.exitEffectChosen = ''; // reset
             }, 1000);
@@ -90,7 +93,7 @@ Vue.component('create-note-dlg', {
     <div class="note-cr-dlg-container animated" v-bind:class="getExitClass()">
         <!-- header -->
         <div class="note-cr-dlg-header">
-            <span class="float-right note-cr-close-btn core-pointer" v-on:click="raiseCloseDlgEvent">&times;</span>
+            <span class="float-right note-cr-close-btn core-pointer" v-on:click="onCancelEvent">&times;</span>
             <span class="float-left">
                 create a task note~
             </span>    

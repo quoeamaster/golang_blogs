@@ -54,7 +54,11 @@
                    v-bind:show="showSideMenu"></side-menu>
 
         <!-- default is TODAY -->
-        <div class="app-today-container">{{chosenDateToDisplay}}</div>
+        <div class="app-today-container">
+            <i class="fas fa-caret-left core-pointer app-today-direction" v-on:click="onDateChangeByDelta(-1)"></i>
+            {{chosenDateToDisplay}}
+            <i class="fas fa-caret-right core-pointer app-today-direction" v-on:click="onDateChangeByDelta(1)"></i>
+        </div>
 
         <!-- note creation dlg -->
         <create-note-dlg v-bind:show="isContextMenuShowing"
