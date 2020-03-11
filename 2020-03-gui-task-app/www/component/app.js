@@ -10,7 +10,8 @@ window.store = new Vuex.Store({
 
         // actual offset(s) on dragging the note (offset = distance between the top,left of a note)
         offsetX: 0,
-        offsetY: 0
+        offsetY: 0,
+        angle: 0
     },
     mutations: {
         setNoteId(state, id) {
@@ -21,6 +22,9 @@ window.store = new Vuex.Store({
         },
         setOffsetY(state, y) {
             state.offsetY = y;
+        },
+        setAngle(state, angle) {
+            state.angle = angle;
         }
     }
 });
@@ -121,10 +125,33 @@ new Vue({
             let storeState = window.store.state;
             let oX = storeState.offsetX;
             let oY = storeState.offsetY;
+            let cX = e.clientX;
+            let cY = e.clientY;
             let noteId = storeState.noteId;
 
-            
+            let eNote = document.querySelector('#'+noteId);
+            if (eNote) {
+                // update position and offsets
+                eNote.style.top  = (cY - oY)+'px';
+                eNote.style.left = (cX - oX)+'px';
 
+                // update angle
+                eNote.style.transform = `rotate(${storeState.angle}deg)`;
+
+                // event emit with noteId involved....
+                window.eventBus.$emit('on-note-dropped', {
+                    noteId: noteId,
+                    top: (cY - oY),
+                    left: (cX - oX),
+                    angle: storeState.angle
+                });
+                // reset store values
+                let storeCommit = window.store.commit;
+                storeCommit('setNoteId', "__none__");
+                storeCommit('setOffsetX', 0);
+                storeCommit('setOffsetY', 0);
+                storeCommit('setAngle', 0);
+            }
         },
 
 

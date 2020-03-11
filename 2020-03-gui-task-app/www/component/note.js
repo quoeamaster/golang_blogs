@@ -7,10 +7,16 @@ Vue.component('note', {
         };
     },
     mounted: function() {
+        let instance = this;
+
+        // event receiver
+        window.eventBus.$on('on-note-dropped', function (data) {
+            instance.onNoteDroppedEvent(data);
+        });
+
         this.id = `__note-${this.translateStringToAscii(this.note.content)}-${this.note.x}-${this.note.y}-${this.note.angle}`;
         //console.log("mnt =>", this.id+': ',this.note.content);
 
-        let instance = this;
         setTimeout(function () {
             let dNote = document.querySelector('#'+instance.id);
 
@@ -44,6 +50,14 @@ Vue.component('note', {
             window.store.commit('setNoteId', this.id);
             window.store.commit('setOffsetX', e.offsetX);
             window.store.commit('setOffsetY', e.offsetY);
+            window.store.commit('setAngle', this.note.angle);
+        },
+
+        onNoteDroppedEvent: function (data) {
+            if (this.id === data.noteId) {
+                console.log('found...', data);
+// TODO: update the top, left, angle and call golang API
+            }
         }
 
 
