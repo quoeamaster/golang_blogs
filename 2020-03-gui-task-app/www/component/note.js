@@ -33,13 +33,25 @@ Vue.component('note', {
                 cVal += val.charCodeAt(i)
             }
             return cVal;
-        }
+        },
 
+        /* ---------------------- */
+        /*    event handler(s)    */
+        /* ---------------------- */
+
+        onDragStart: function (e) {
+            //console.log('dragStart', e);
+            window.store.commit('setNoteId', this.id);
+            window.store.commit('setOffsetX', e.offsetX);
+            window.store.commit('setOffsetY', e.offsetY);
+        }
 
 
     },
     template: `
 <div class="note-container core-pointer" 
+    draggable="true"
+    v-on:dragstart="onDragStart(event)"
     v-bind:id="this.id"
     v-bind:key="this.id" >
     <!-- style="top: 0; left: 0;" -->

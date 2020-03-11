@@ -2,6 +2,31 @@
 let eventBus = new Vue();
 window.eventBus = eventBus;
 
+// create a vuex store
+window.store = new Vuex.Store({
+    state: {
+        // the draggable note's key/id, __none__ means no note dragging or dragged before
+        noteId: '__none__',
+
+        // actual offset(s) on dragging the note (offset = distance between the top,left of a note)
+        offsetX: 0,
+        offsetY: 0
+    },
+    mutations: {
+        setNoteId(state, id) {
+            state.noteId = id;
+        },
+        setOffsetX(state, x) {
+            state.offsetX = x;
+        },
+        setOffsetY(state, y) {
+            state.offsetY = y;
+        }
+    }
+});
+
+
+
 new Vue({
     el: '#app',
     data: function () {
@@ -83,6 +108,22 @@ new Vue({
                 this.chosenDateToDisplay = dChosenInString;
                 //this.chosenNotes = this.notes[this.chosenDateToDisplay];
             }
+
+        },
+
+        // * note container event */
+
+        onNotesContainerDragover: function(e) {
+            e.preventDefault();
+            //console.log('allowDrag', e);
+        },
+        onNotesContainerDrop: function(e) {
+            let storeState = window.store.state;
+            let oX = storeState.offsetX;
+            let oY = storeState.offsetY;
+            let noteId = storeState.noteId;
+
+            
 
         },
 

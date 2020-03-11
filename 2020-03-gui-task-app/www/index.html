@@ -8,6 +8,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script> <!-- vue -->
 
+    <!-- vuex -->
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
+    <script src="https://unpkg.com/vuex"></script>
+
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> <!-- JQuery -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script> <!-- Bootstrap tooltips -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script> <!-- Bootstrap core JavaScript -->
@@ -69,8 +73,15 @@
                          v-on:close-note-creation="onCloseNoteCreation"></create-note-dlg>
 
         <!-- display the notes -->
-        <note v-for="note in notes[chosenDateToDisplay]"
-              v-bind:note="note"></note>
+        <!-- 30px for top menu; 40px for today container and 10px + 30px(buffer) for the frame -->
+        <div class="notes-container"
+             style="height: 500px;"
+             v-on:drop="onNotesContainerDrop(event)"
+             v-on:dragover="onNotesContainerDragover(event)">
+            <note v-for="note in notes[chosenDateToDisplay]"
+                  v-bind:note="note"></note>
+        </div>
+
 
     </div>
 
