@@ -115,45 +115,6 @@ new Vue({
 
         },
 
-        // * note container event */
-
-        onNotesContainerDragover: function(e) {
-            e.preventDefault();
-            //console.log('allowDrag', e);
-        },
-        onNotesContainerDrop: function(e) {
-            let storeState = window.store.state;
-            let oX = storeState.offsetX;
-            let oY = storeState.offsetY;
-            let cX = e.clientX;
-            let cY = e.clientY;
-            let noteId = storeState.noteId;
-
-            let eNote = document.querySelector('#'+noteId);
-            if (eNote) {
-                // update position and offsets
-                eNote.style.top  = (cY - oY)+'px';
-                eNote.style.left = (cX - oX)+'px';
-
-                // update angle
-                eNote.style.transform = `rotate(${storeState.angle}deg)`;
-
-                // event emit with noteId involved....
-                window.eventBus.$emit('on-note-dropped', {
-                    noteId: noteId,
-                    top: (cY - oY),
-                    left: (cX - oX),
-                    angle: storeState.angle
-                });
-                // reset store values
-                let storeCommit = window.store.commit;
-                storeCommit('setNoteId', "__none__");
-                storeCommit('setOffsetX', 0);
-                storeCommit('setOffsetY', 0);
-                storeCommit('setAngle', 0);
-            }
-        },
-
 
         /* ------------------------------ */
         /*    golang interfacing event    */

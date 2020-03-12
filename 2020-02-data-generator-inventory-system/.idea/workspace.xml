@@ -2,11 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4a412401-95ac-462e-8a5d-6d0d4151bb5e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/assets.go" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/assets.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/other_resources/notes.json" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/other_resources/notes.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/tasksApp" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/tasksApp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/www/component/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/www/component/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/www/component/note.js" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/www/component/note.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/www/component/sideMenu.js" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/www/component/sideMenu.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2020-03-gui-task-app/www/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../2020-03-gui-task-app/www/index.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -176,7 +180,7 @@
     <frame x="0" y="23" width="1680" height="1027" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.30830282" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23321123" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />

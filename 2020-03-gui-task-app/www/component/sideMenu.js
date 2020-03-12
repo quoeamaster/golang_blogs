@@ -52,11 +52,18 @@ Vue.component('side-menu', {
     v-bind:class="getSideMenuClass()" >
     <!-- close button -->
     <div class="side-menu-close core-pointer" v-on:click="onCloseClick">&times;</div>
-    <div class="side-menu-caption">menu</div>
+    <div class="side-menu-caption">about</div>
     
-    <div class="side-menu-item">option1</div>
-    <div class="side-menu-item">about</div>
-    
+    <div>
+        <span class="side-menu-item" style="font-size: 1.4em;">
+            daily notes app</span>
+        <span class="side-menu-item" style="font-size: 1.0em;">
+            version: 1.0.0</span>
+        <span class="side-menu-item" style="font-size: 1.0em;">
+            powered by: Que Master</span>
+        <span class="side-menu-item" style="font-size: 1.0em;">
+            <i class="far fa-envelope"></i> quoeamaster@gmail.com</span>
+    </div>
 </div>
     `
 });

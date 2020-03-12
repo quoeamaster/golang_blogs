@@ -1,2 +1,4 @@
-{ "2020-03-09": [{ "angle": 15, "content": "diy on curry veg", "x": 200, "y": 150 }, { "angle": -15, "content": "have party at 7pm", "x": 400, "y": 50 }, { "angle": -45, "content": "movies with wife (8pm)", "x": 50, "y": 75 }],
-"2020-03-10": [{ "y": 40, "angle": 14, "content": "continue the note object", "x": 40 }] }
+{ "2020-03-09": [{ "y": 150, "angle": 15, "content": "diy on curry veg", "x": 200 }, { "angle": -15, "content": "have party at 7pm", "x": 400, "y": 50 }, { "y": 75, "angle": -45, "content": "movies with wife (8pm)", "x": 50 }],
+"2020-03-10": [{ "y": 40, "angle": 14, "content": "continue the note object", "x": 40 }],
+"2020-03-11": [{ "y": 200, "angle": -15, "content": "migration", "x": 20 }],
+"2020-03-12": [{ "content": "bug fix on github issue 12456", "x": 150, "y": 100, "angle": 45 }, { "content": "add QA tasklist for the notes app", "x": 480, "y": 200, "angle": -5 }, { "content": "upside down tasking; need a gym workout (18:00)", "x": 300, "y": 100, "angle": -120 }] }
