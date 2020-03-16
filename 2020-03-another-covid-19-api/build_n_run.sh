@@ -1,3 +1,4 @@
-go build -o cvirus_study
-./cvirus_study
+go build -o cvirus_tracker
+./cvirus_tracker
+
 
