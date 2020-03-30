@@ -9,4 +9,8 @@ the build process:
 
 ---
 
+to run another html instead of index.html
+* source build_n_run.sh demo.html
+* now the demo.html would be run instead of index.html
+
 
