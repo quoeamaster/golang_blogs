@@ -39,6 +39,8 @@ func main()  {
 	// init the app model
 	appPtr := initApp(ui)
 	fmt.Println("app model:", appPtr)
+	// remove it if not for demo
+	initDemoApp(ui)
 
 	// connect to FS (fileServer pointing to folder www)
 	listener, err := net.Listen("tcp", "127.0.0.1:0")
@@ -48,7 +50,12 @@ func main()  {
 	// start the server by binding the listener
 	go http.Serve(listener, http.FileServer(FS))
 
-	err = ui.Load(fmt.Sprintf("http://%s", listener.Addr()))
+	// create the url for running
+	url := fmt.Sprintf("http://%v", listener.Addr())
+	if len(os.Args) > 1 {
+		url = fmt.Sprintf("%v/%v", url, os.Args[1])
+	}
+	err = ui.Load(url)
 	genericErrHandler(err, "load the index.html")
 
 	// os signal handling
@@ -97,3 +104,14 @@ func initApp(ui lorca.UI) (appPtr *app.App) {
 	return
 }
 
+func initDemoApp(ui lorca.UI)  {
+	err := ui.Bind("onStart", func() {
+		// perform the server side task here
+		fmt.Println("app started")
+	})
+	if err != nil {
+		// or any exception handling code here
+		panic(err)
+	}
+
+}

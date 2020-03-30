@@ -14,4 +14,4 @@ go build -o tasksApp
 mv generateAssets.go.disable generateAssets.go
 
 # run
-./tasksApp
+./tasksApp $1

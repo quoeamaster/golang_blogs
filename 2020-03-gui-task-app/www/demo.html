@@ -1,0 +1,61 @@
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script> <!-- vue -->
+
+    <!-- vuex -->
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
+    <script src="https://unpkg.com/vuex"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script> <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script> <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/js/mdb.min.js"></script> <!-- MDB core JavaScript -->
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"> <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/css/mdb.min.css" rel="stylesheet"> <!-- Material Design Bootstrap -->
+
+    <!-- app specific resources -->
+
+
+
+    <link href="asset/css/app.css" rel="stylesheet"> <!-- app css -->
+    <link href="asset/css/app_other_dimension.css" rel="stylesheet"> <!-- app other dimension css -->
+</head>
+
+<body onload="onStart()">
+    <!-- app entry point -->
+    <div id="app">
+        <!-- splash -->
+        <splash-screen></splash-screen>
+
+        <div style="height: 30px; box-shadow: 0 4px 5px #aaa; line-height: 30px; vertical-align: middle; padding-left: 4px; padding-right: 4px;">
+            <div class="float-left" style="font-family: 'Comic Sans MS'; font-size: 0.8em;">
+                daily task app
+            </div>
+            <div class="float-right" style="font-size: 1.1em; margin-top: 4px;">
+                <i class="far fa-sticky-note" style="cursor: pointer;" v-on:click="onAddNoteClick"></i>
+            </div>
+        </div>
+
+        <!-- create note dlg -->
+        <create-note-dlg v-on:on-display-dlg-update="onDisplayDlgUpdate"
+                         v-on:on-add-note="onAddNote"
+                         v-bind:show="displayDlg"></create-note-dlg>
+
+        <note v-for="note in notes"
+              v-bind:key="note.key"
+              v-bind:note="note"></note>
+
+
+    </div>
+
+    <!-- load back all vue related components; app.js MUST be the last one -->
+    <script src="./component/demo/note.js"></script>
+    <script src="./component/demo/splash.js"></script>
+    <script src="./component/demo/createNoteDlg.js"></script>
+    <script src="./component/demo/app.js"></script>
+
+</body>
+
+</html>
