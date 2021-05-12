@@ -29,7 +29,9 @@ func TestMultiRoutineAccess_loggerImpl(t *testing.T) {
 
 			log := logger.GetLoggerImpl()
 			// append the address value of instance "log"
+			lock.Lock()
 			msgArray = append(msgArray, fmt.Sprintf("%p", log))
+			lock.Unlock()
 			log.Log(fmt.Sprintf("{loggerImpl} this is a log entry from [%v]\n", idx))
 		}(i)
 	}
@@ -70,7 +72,9 @@ func TestMultiRoutineAccessWithDelay_loggerImpl(t *testing.T) {
 
 			log := logger.GetLoggerImpl()
 			// append the address value of instance "log"
+			lock.Lock()
 			msgArray = append(msgArray, fmt.Sprintf("%p", log))
+			lock.Unlock()
 			log.Log(fmt.Sprintf("[with delay] {loggerImpl} this is a log entry from [%v]\n", idx))
 		}(i)
 	}
